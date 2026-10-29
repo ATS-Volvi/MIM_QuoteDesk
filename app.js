@@ -1,81 +1,175 @@
 /**
  * MIM QuoteFlow AI — High-Fidelity UI Prototype
- * Core State & Interactive Engine
+ * Core State & Interactive Engine (Phase 1.5 Verified)
  */
 
-// Initial Dummy Data
-const DEFAULT_QUOTE = {
-  id: "DRAFT-2026-0042",
-  status: "Draft",
-  createdBy: "Alex Morgan (Sales Engineer)",
-  lastSaved: "Just now",
-  customerRoute: "D", // D: Debtors Ledger, G: General Ledger
-  customerAccount: "Al-Futtaim Engineering Ltd [ACC-88219]",
-  companyName: "Al-Futtaim Engineering Ltd",
-  contactPerson: "Mr. Zaid Mansoor",
-  email: "z.mansoor@alfuttaim.ae",
-  phone: "+971 4 213 4400",
-  enquiryText: "Please quote 25 units of the stainless steel wall-mounted dispenser, including the standard mounting kit. Kindly share your best price and expected lead time.",
-  enquiryExtracted: true,
-  leadTime: "2 - 3 Weeks from receipt of PO",
-  deliveryNotes: "Ex-works Jebel Ali Warehouse / Delivered to site within Dubai emirate",
-  internalRemarks: "Customer has volume discount tier 2 applied. Need to check stock level for SS-DISP-WM01 with procurement.",
-  customerRemarks: "Prices valid for 30 calendar days. Includes 12-month manufacturer replacement warranty against defects.",
-  lineItems: [
-    {
-      id: "line-1",
-      lineNo: 1,
-      description: "Stainless Steel Wall Dispenser 1000ml",
-      erpCode: "MIM-SS-DISP-WM01",
-      variant: "304 Grade Brushed Satin, Lockable",
-      qty: 25,
-      unit: "PCS",
-      sellingPrice: 185.00,
-      cost: 115.00,
-      status: "Confirmed", // Confirmed, Awaiting, PriceWarning
-      notes: ""
-    },
-    {
-      id: "line-2",
-      lineNo: 2,
-      description: "Standard Mounting Kit",
-      erpCode: "MIM-ACC-MK02",
-      variant: "Heavy Duty Wall Anchor & Bracket Kit",
-      qty: 25,
-      unit: "SET",
-      sellingPrice: 35.00,
-      cost: 18.00,
-      status: "Confirmed",
-      notes: ""
-    },
-    {
-      id: "line-3",
-      lineNo: 3,
-      description: "Tamper-proof Security Key Spare",
-      erpCode: null, // Unassigned
-      variant: "Spare Key Set (Triangular 8mm)",
-      qty: 5,
-      unit: "PCS",
-      sellingPrice: 15.00,
-      cost: null, // Unknown cost
-      status: "Awaiting",
-      notes: "Cost pending catalog match"
-    },
-    {
-      id: "line-4",
-      lineNo: 4,
-      description: "Replacement Dispenser Nozzle & Valve",
-      erpCode: "MIM-VALVE-NZ04",
-      variant: "Silicone Anti-Drip Valve Core",
-      qty: 10,
-      unit: "PCS",
-      sellingPrice: 17.00,
-      cost: 9.50,
-      status: "PriceWarning",
-      historicalPrice: 16.00,
-      notes: "Previous quotation price: 16.00 AED"
-    }
-  ]
+// Initial Sample Drafts Database
+const INITIAL_DRAFTS = {
+  "DRAFT-2026-0042": {
+    id: "DRAFT-2026-0042",
+    status: "Draft",
+    createdBy: "Alex Morgan (Sales Engineer)",
+    lastSaved: "Just now",
+    customerRoute: "D", // D: Debtors Ledger, G: General Ledger
+    customerAccount: "Al-Futtaim Engineering Ltd [ACC-88219]",
+    companyName: "Al-Futtaim Engineering Ltd",
+    contactPerson: "Mr. Zaid Mansoor",
+    email: "z.mansoor@alfuttaim.ae",
+    phone: "+971 4 213 4400",
+    enquiryText: "Please quote 25 units of the stainless steel wall-mounted dispenser, including the standard mounting kit. Kindly share your best price and expected lead time.",
+    enquiryExtracted: true,
+    leadTime: "2 - 3 Weeks from receipt of PO",
+    deliveryNotes: "Ex-works Jebel Ali Warehouse / Delivered to site within Dubai emirate",
+    internalRemarks: "Customer has volume discount tier 2 applied. Need to check stock level for SS-DISP-WM01 with procurement.",
+    customerRemarks: "Prices valid for 30 calendar days. Includes 12-month manufacturer replacement warranty against defects.",
+    lineItems: [
+      {
+        id: "line-1",
+        lineNo: 1,
+        description: "Stainless Steel Wall Dispenser 1000ml",
+        erpCode: "MIM-SS-DISP-WM01",
+        variant: "304 Grade Brushed Satin, Lockable",
+        qty: 25,
+        unit: "PCS",
+        sellingPrice: 185.00,
+        cost: 115.00,
+        status: "Confirmed",
+        notes: ""
+      },
+      {
+        id: "line-2",
+        lineNo: 2,
+        description: "Standard Mounting Kit",
+        erpCode: "MIM-ACC-MK02",
+        variant: "Heavy Duty Wall Anchor & Bracket Kit",
+        qty: 25,
+        unit: "SET",
+        sellingPrice: 35.00,
+        cost: 18.00,
+        status: "Confirmed",
+        notes: ""
+      },
+      {
+        id: "line-3",
+        lineNo: 3,
+        description: "Tamper-proof Security Key Spare",
+        erpCode: null, // Unassigned catalog item
+        variant: "Spare Key Set (Triangular 8mm)",
+        qty: 5,
+        unit: "PCS",
+        sellingPrice: 15.00,
+        cost: null, // Unknown cost
+        status: "Awaiting",
+        notes: "Cost pending catalog match"
+      },
+      {
+        id: "line-4",
+        lineNo: 4,
+        description: "Replacement Dispenser Nozzle & Valve",
+        erpCode: "MIM-VALVE-NZ04",
+        variant: "Silicone Anti-Drip Valve Core",
+        qty: 10,
+        unit: "PCS",
+        sellingPrice: 17.00,
+        cost: 9.50,
+        status: "PriceWarning",
+        historicalPrice: 16.00,
+        notes: "Previous quotation price: 16.00 AED"
+      }
+    ]
+  },
+  "DRAFT-2026-0039": {
+    id: "DRAFT-2026-0039",
+    status: "Draft",
+    createdBy: "Sarah Chen (Senior Estimator)",
+    lastSaved: "45 mins ago",
+    customerRoute: "D",
+    customerAccount: "Khansaheb Civil Engineering [ACC-44102]",
+    companyName: "Khansaheb Civil Engineering LLC",
+    contactPerson: "Eng. Tariq Khansaheb",
+    email: "tariq@khansaheb.ae",
+    phone: "+971 4 333 1200",
+    enquiryText: "Urgent quote required for Dubai Creek Harbour Phase 2 package: 120 sets floor dispensers and specialty nozzles.",
+    enquiryExtracted: true,
+    leadTime: "3 - 4 Weeks",
+    deliveryNotes: "Site delivery: Dubai Creek Harbour Sector 4",
+    internalRemarks: "Requires special shipping arrangement from Europe warehouse.",
+    customerRemarks: "Prices valid for 15 days.",
+    lineItems: [
+      {
+        id: "line-39-1",
+        lineNo: 1,
+        description: "Floor Standing Sanitizer Dispenser SS304",
+        erpCode: "MIM-SS-DISP-FR01",
+        variant: "Base weighted 12kg",
+        qty: 120,
+        unit: "PCS",
+        sellingPrice: 320.00,
+        cost: 295.00,
+        status: "Confirmed",
+        notes: ""
+      },
+      {
+        id: "line-39-2",
+        lineNo: 2,
+        description: "Custom Sensor Assembly Kit",
+        erpCode: null,
+        variant: "Infrared automatic trigger",
+        qty: 120,
+        unit: "SET",
+        sellingPrice: 45.00,
+        cost: null, // Unknown cost - Blocker!
+        status: "Awaiting",
+        notes: "Blocker: Cost unavailable"
+      }
+    ]
+  },
+  "DRAFT-2026-0035": {
+    id: "DRAFT-2026-0035",
+    status: "Ready for Review",
+    createdBy: "Tariq Al-Hashimi (Sales Engineer)",
+    lastSaved: "Yesterday 16:30",
+    customerRoute: "G", // General Ledger
+    customerAccount: "Sobha Realty LLC [ACC-90112]",
+    companyName: "Sobha Realty LLC",
+    contactPerson: "Mr. Rajiv Menon",
+    email: "rajiv@sobharealty.com",
+    phone: "+971 4 423 8900",
+    enquiryText: "Quotation for 20 units heavy duty wall mounting kits for Sobha Hartland show villa.",
+    enquiryExtracted: true,
+    leadTime: "Immediate (Ex-stock)",
+    deliveryNotes: "Ex-works Dubai warehouse",
+    internalRemarks: "All products verified in Jebel Ali stock.",
+    customerRemarks: "Prices valid for 30 calendar days.",
+    lineItems: [
+      {
+        id: "line-35-1",
+        lineNo: 1,
+        description: "Standard Mounting Kit",
+        erpCode: "MIM-ACC-MK02",
+        variant: "Heavy Duty Wall Anchor & Bracket Kit",
+        qty: 20,
+        unit: "SET",
+        sellingPrice: 35.00,
+        cost: 18.00,
+        status: "Confirmed",
+        notes: ""
+      },
+      {
+        id: "line-35-2",
+        lineNo: 2,
+        description: "Replacement Dispenser Nozzle & Valve",
+        erpCode: "MIM-VALVE-NZ04",
+        variant: "Silicone Anti-Drip Valve Core",
+        qty: 20,
+        unit: "PCS",
+        sellingPrice: 17.00,
+        cost: 9.50,
+        status: "Confirmed",
+        notes: ""
+      }
+    ]
+  }
 };
 
 // ERP Master Catalog Database (Demo Mode)
@@ -148,19 +242,25 @@ const ERP_CATALOG = [
   }
 ];
 
-// Active State
-let currentQuote = JSON.parse(JSON.stringify(DEFAULT_QUOTE));
+// In-Memory Drafts Storage
+let draftsStore = JSON.parse(JSON.stringify(INITIAL_DRAFTS));
+let currentQuote = JSON.parse(JSON.stringify(draftsStore["DRAFT-2026-0042"]));
 let activeScreen = "workspace"; // 'workspace', 'dashboard', 'drafts', 'preview'
 
 // Initialize Application
 document.addEventListener("DOMContentLoaded", () => {
-  // Load saved draft from localStorage if available
-  const saved = localStorage.getItem("MIM_CURRENT_DRAFT");
-  if (saved) {
+  // Load saved drafts from localStorage if available
+  const savedStore = localStorage.getItem("MIM_DRAFTS_STORE");
+  if (savedStore) {
     try {
-      currentQuote = JSON.parse(saved);
+      draftsStore = JSON.parse(savedStore);
+      // Restore active draft or default
+      const activeId = localStorage.getItem("MIM_ACTIVE_DRAFT_ID") || "DRAFT-2026-0042";
+      if (draftsStore[activeId]) {
+        currentQuote = JSON.parse(JSON.stringify(draftsStore[activeId]));
+      }
     } catch (e) {
-      console.warn("Could not load draft from storage", e);
+      console.warn("Could not load drafts from localStorage", e);
     }
   }
 
@@ -171,13 +271,13 @@ document.addEventListener("DOMContentLoaded", () => {
 // Setup App Navigation
 function setupNavigation() {
   document.querySelectorAll("[data-nav]").forEach(el => {
-    el.addEventListener("click", (e) => {
+    el.addEventListener("click", () => {
       const target = el.getAttribute("data-nav");
       switchScreen(target);
     });
   });
 
-  // Global search shortcut
+  // Global search shortcut (Cmd+K / Ctrl+K)
   window.addEventListener("keydown", (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
       e.preventDefault();
@@ -284,10 +384,10 @@ function renderWorkspace(container) {
               <div class="form-group col-span-2">
                 <label class="form-label">Searchable Customer Account *</label>
                 <select class="form-select" id="customerAccountSelect" onchange="handleAccountChange(this.value)">
-                  <option value="Al-Futtaim Engineering Ltd [ACC-88219]" selected>Al-Futtaim Engineering Ltd — ACC-88219 (Credit Active)</option>
-                  <option value="Khansaheb Civil Engineering [ACC-44102]">Khansaheb Civil Engineering — ACC-44102</option>
-                  <option value="Dutco Balfour Beatty [ACC-12093]">Dutco Balfour Beatty — ACC-12093</option>
-                  <option value="Sobha Realty LLC [ACC-90112]">Sobha Realty LLC — ACC-90112</option>
+                  <option value="Al-Futtaim Engineering Ltd [ACC-88219]" ${currentQuote.customerAccount.includes('ACC-88219') ? 'selected' : ''}>Al-Futtaim Engineering Ltd — ACC-88219 (Credit Active)</option>
+                  <option value="Khansaheb Civil Engineering [ACC-44102]" ${currentQuote.customerAccount.includes('ACC-44102') ? 'selected' : ''}>Khansaheb Civil Engineering — ACC-44102</option>
+                  <option value="Dutco Balfour Beatty [ACC-12093]" ${currentQuote.customerAccount.includes('ACC-12093') ? 'selected' : ''}>Dutco Balfour Beatty — ACC-12093</option>
+                  <option value="Sobha Realty LLC [ACC-90112]" ${currentQuote.customerAccount.includes('ACC-90112') ? 'selected' : ''}>Sobha Realty LLC — ACC-90112</option>
                 </select>
                 <div style="font-size: 10.5px; color: var(--slate-500); margin-top: 3px;">
                   ℹ️ Linked to ERP Debtors Ledger. Note: Selecting an account verifies approved credit terms.
@@ -296,7 +396,7 @@ function renderWorkspace(container) {
             ` : `
               <div class="form-group col-span-2">
                 <label class="form-label">Recipient / Company Name *</label>
-                <input type="text" class="form-input" id="companyNameInput" value="${currentQuote.companyName}" oninput="currentQuote.companyName = this.value" placeholder="Enter recipient organization">
+                <input type="text" class="form-input" id="companyNameInput" value="${escapeHtml(currentQuote.companyName)}" oninput="currentQuote.companyName = this.value" placeholder="Enter recipient organization">
                 <div style="font-size: 10.5px; color: var(--slate-500); margin-top: 3px;">
                   ℹ️ General Ledger routing: Quoting directly to recipient. Does not create a new ERP customer record.
                 </div>
@@ -305,17 +405,17 @@ function renderWorkspace(container) {
 
             <div class="form-group">
               <label class="form-label">Contact Person</label>
-              <input type="text" class="form-input" value="${currentQuote.contactPerson}" oninput="currentQuote.contactPerson = this.value">
+              <input type="text" class="form-input" value="${escapeHtml(currentQuote.contactPerson)}" oninput="currentQuote.contactPerson = this.value">
             </div>
 
             <div class="form-group">
               <label class="form-label">Email Address</label>
-              <input type="email" class="form-input" value="${currentQuote.email}" oninput="currentQuote.email = this.value">
+              <input type="email" class="form-input" value="${escapeHtml(currentQuote.email)}" oninput="currentQuote.email = this.value">
             </div>
 
             <div class="form-group">
               <label class="form-label">Phone</label>
-              <input type="text" class="form-input" value="${currentQuote.phone}" oninput="currentQuote.phone = this.value">
+              <input type="text" class="form-input" value="${escapeHtml(currentQuote.phone)}" oninput="currentQuote.phone = this.value">
             </div>
 
             <div class="form-group">
@@ -325,7 +425,7 @@ function renderWorkspace(container) {
 
             <div class="form-group col-span-2">
               <label class="form-label">Original Customer Enquiry (RFQ Text)</label>
-              <textarea class="form-textarea" id="enquiryTextInput" oninput="currentQuote.enquiryText = this.value">${currentQuote.enquiryText}</textarea>
+              <textarea class="form-textarea" id="enquiryTextInput" oninput="currentQuote.enquiryText = this.value">${escapeHtml(currentQuote.enquiryText)}</textarea>
             </div>
           </div>
         </div>
@@ -345,7 +445,7 @@ function renderWorkspace(container) {
         </div>
         <div class="card-body">
           <div class="enquiry-quote-box" id="enquiryQuoteDisplay">
-            "${currentQuote.enquiryText}"
+            "${escapeHtml(currentQuote.enquiryText)}"
           </div>
 
           <div class="ai-chips-grid">
@@ -466,19 +566,19 @@ function renderWorkspace(container) {
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Quotation-Level Lead Time *</label>
-              <input type="text" class="form-input" value="${currentQuote.leadTime}" oninput="currentQuote.leadTime = this.value">
+              <input type="text" class="form-input" value="${escapeHtml(currentQuote.leadTime)}" oninput="currentQuote.leadTime = this.value">
             </div>
             <div class="form-group">
               <label class="form-label">Delivery / Fulfilment Terms</label>
-              <input type="text" class="form-input" value="${currentQuote.deliveryNotes}" oninput="currentQuote.deliveryNotes = this.value">
+              <input type="text" class="form-input" value="${escapeHtml(currentQuote.deliveryNotes)}" oninput="currentQuote.deliveryNotes = this.value">
             </div>
             <div class="form-group col-span-2">
               <label class="form-label">Internal Remarks (Private to sales & management)</label>
-              <textarea class="form-textarea" oninput="currentQuote.internalRemarks = this.value">${currentQuote.internalRemarks}</textarea>
+              <textarea class="form-textarea" oninput="currentQuote.internalRemarks = this.value">${escapeHtml(currentQuote.internalRemarks)}</textarea>
             </div>
             <div class="form-group col-span-2">
               <label class="form-label">Customer-Facing Remarks (Printed on formal quotation)</label>
-              <textarea class="form-textarea" oninput="currentQuote.customerRemarks = this.value">${currentQuote.customerRemarks}</textarea>
+              <textarea class="form-textarea" oninput="currentQuote.customerRemarks = this.value">${escapeHtml(currentQuote.customerRemarks)}</textarea>
             </div>
           </div>
         </div>
@@ -565,11 +665,11 @@ function renderWorkspace(container) {
         </div>
         <div class="check-item">
           ${totals.hasUnmatchedItems ? '<span class="check-icon-warning">⚠️</span>' : '<span class="check-icon-ready">✓</span>'}
-          <span>Products Confirmed (${totals.hasUnmatchedItems ? '1 Unmatched' : 'All Confirmed'})</span>
+          <span>Products Confirmed (${totals.hasUnmatchedItems ? 'Unmatched Items Present' : 'All Confirmed'})</span>
         </div>
         <div class="check-item">
           ${totals.hasUnknownCost ? '<span class="check-icon-warning">⚠️</span>' : '<span class="check-icon-ready">✓</span>'}
-          <span>Costs Available (${totals.hasUnknownCost ? '1 Unknown' : 'Complete'})</span>
+          <span>Costs Available (${totals.hasUnknownCost ? 'Cost Missing' : 'Complete'})</span>
         </div>
         <div class="check-item">
           ${totals.hasPriceBelowCost ? '<span class="check-icon-blocked">✕</span>' : '<span class="check-icon-ready">✓</span>'}
@@ -604,9 +704,12 @@ function renderWorkspace(container) {
 // Render dynamic rows in Line-Item Table
 function renderTableRows() {
   return currentQuote.lineItems.map((item, index) => {
-    const lineTotal = item.qty * item.sellingPrice;
-    const isBelowCost = item.cost !== null && item.sellingPrice < item.cost;
-    const isCostUnknown = item.cost === null;
+    const qty = Math.max(1, Math.floor(Number(item.qty) || 1));
+    const sellingPrice = Math.max(0, Number(item.sellingPrice) || 0);
+    const lineTotal = Math.round(qty * sellingPrice * 100) / 100;
+    
+    const isBelowCost = item.cost !== null && sellingPrice < item.cost;
+    const isCostUnknown = item.cost === null || item.cost === undefined;
 
     let rowClass = "row-confirmed";
     let statusBadge = '<span class="badge badge-confirmed">Confirmed</span>';
@@ -646,8 +749,8 @@ function renderTableRows() {
         </td>
         <td style="text-align: right;">
           <input type="number" class="inline-num-input" min="1" 
-                 value="${item.qty}" 
-                 onchange="updateRowField('${item.id}', 'qty', parseFloat(this.value) || 1)">
+                 value="${qty}" 
+                 onchange="updateRowField('${item.id}', 'qty', this.value)">
         </td>
         <td>
           <select class="form-select" style="padding: 2px 4px; font-size: 11px; width: 55px;" 
@@ -660,18 +763,24 @@ function renderTableRows() {
         </td>
         <td style="text-align: right;">
           <input type="number" class="inline-num-input" step="0.5" 
-                 value="${item.sellingPrice.toFixed(2)}" 
-                 onchange="updateRowField('${item.id}', 'sellingPrice', parseFloat(this.value) || 0)">
+                 value="${sellingPrice.toFixed(2)}" 
+                 onchange="updateRowField('${item.id}', 'sellingPrice', this.value)">
           ${item.historicalPrice ? `
             <div style="font-size: 9.5px; color: var(--danger); margin-top: 2px; white-space: nowrap;">
               Prev: ${item.historicalPrice.toFixed(2)}
             </div>
+            ${item.status === 'PriceWarning' ? `
+              <div style="display: flex; gap: 4px; margin-top: 2px;">
+                <button class="btn btn-sm btn-ghost" style="padding: 1px 4px; font-size: 9px;" onclick="resolvePriceWarning('${item.id}', 'accept')">Accept</button>
+                <button class="btn btn-sm btn-ghost" style="padding: 1px 4px; font-size: 9px;" onclick="resolvePriceWarning('${item.id}', 'revert')">Revert</button>
+              </div>
+            ` : ''}
           ` : ''}
         </td>
         <td style="text-align: right; font-family: var(--font-mono);">
           ${isCostUnknown 
             ? '<span class="text-warning" title="Cost pending ERP master link">Unknown</span>' 
-            : `AED ${item.cost.toFixed(2)}`}
+            : `AED ${Number(item.cost).toFixed(2)}`}
         </td>
         <td style="text-align: right; font-family: var(--font-mono); font-weight: 600;">
           AED ${formatMoney(lineTotal)}
@@ -689,7 +798,7 @@ function renderTableRows() {
   }).join("");
 }
 
-// Calculations Engine
+// Calculations Engine with Strict Decimal Precision
 function calculateTotals() {
   let subtotal = 0;
   let totalCost = 0;
@@ -699,15 +808,19 @@ function calculateTotals() {
   let totalUnits = 0;
 
   currentQuote.lineItems.forEach(item => {
-    const lineTotal = item.qty * item.sellingPrice;
+    const qty = Math.max(1, Math.floor(Number(item.qty) || 1));
+    const sellingPrice = Math.max(0, Number(item.sellingPrice) || 0);
+    const lineTotal = Math.round(qty * sellingPrice * 100) / 100;
+    
     subtotal += lineTotal;
-    totalUnits += item.qty;
+    totalUnits += qty;
 
-    if (item.cost === null) {
+    if (item.cost === null || item.cost === undefined || isNaN(item.cost)) {
       hasUnknownCost = true;
     } else {
-      totalCost += (item.qty * item.cost);
-      if (item.sellingPrice < item.cost) {
+      const cost = Number(item.cost);
+      totalCost += Math.round(qty * cost * 100) / 100;
+      if (sellingPrice < cost) {
         hasPriceBelowCost = true;
       }
     }
@@ -717,16 +830,19 @@ function calculateTotals() {
     }
   });
 
-  const vat = subtotal * 0.05;
-  const grandTotal = subtotal + vat;
-  const grossProfit = hasUnknownCost ? 0 : (subtotal - totalCost);
-  const grossMargin = (hasUnknownCost || subtotal === 0) ? 0 : (grossProfit / subtotal) * 100;
+  subtotal = Math.round(subtotal * 100) / 100;
+  totalCost = Math.round(totalCost * 100) / 100;
+
+  const vat = Math.round(subtotal * 0.05 * 100) / 100;
+  const grandTotal = Math.round((subtotal + vat) * 100) / 100;
+  const grossProfit = hasUnknownCost ? null : Math.round((subtotal - totalCost) * 100) / 100;
+  const grossMargin = (hasUnknownCost || subtotal === 0) ? (hasUnknownCost ? null : 0) : Math.round(((grossProfit / subtotal) * 100) * 10) / 10;
 
   return {
     subtotal,
     vat,
     grandTotal,
-    totalCost,
+    totalCost: hasUnknownCost ? null : totalCost,
     grossProfit,
     grossMargin,
     hasUnknownCost,
@@ -740,7 +856,30 @@ function updateRowField(id, field, value) {
   const item = currentQuote.lineItems.find(i => i.id === id);
   if (!item) return;
 
-  item[field] = value;
+  if (field === "qty") {
+    item.qty = Math.max(1, Math.floor(parseFloat(value) || 1));
+  } else if (field === "sellingPrice") {
+    item.sellingPrice = Math.max(0, Math.round((parseFloat(value) || 0) * 100) / 100);
+  } else {
+    item[field] = value;
+  }
+
+  renderWorkspace(document.getElementById("mainContent"));
+}
+
+function resolvePriceWarning(id, action) {
+  const item = currentQuote.lineItems.find(i => i.id === id);
+  if (!item) return;
+
+  if (action === "accept") {
+    item.status = "Confirmed";
+    showToast("Price override accepted.");
+  } else if (action === "revert") {
+    item.sellingPrice = item.historicalPrice;
+    item.status = "Confirmed";
+    showToast(`Price reverted to historical rate: AED ${item.historicalPrice.toFixed(2)}.`);
+  }
+
   renderWorkspace(document.getElementById("mainContent"));
 }
 
@@ -790,6 +929,16 @@ function handleAccountChange(accountName) {
     currentQuote.contactPerson = "Eng. Tariq Khansaheb";
     currentQuote.email = "tariq@khansaheb.ae";
     currentQuote.phone = "+971 4 333 1200";
+  } else if (accountName.includes("Sobha")) {
+    currentQuote.companyName = "Sobha Realty LLC";
+    currentQuote.contactPerson = "Mr. Rajiv Menon";
+    currentQuote.email = "rajiv@sobharealty.com";
+    currentQuote.phone = "+971 4 423 8900";
+  } else if (accountName.includes("Dutco")) {
+    currentQuote.companyName = "Dutco Balfour Beatty LLC";
+    currentQuote.contactPerson = "Mr. Kevin Clark";
+    currentQuote.email = "k.clark@dutco.ae";
+    currentQuote.phone = "+971 4 885 1100";
   }
   renderWorkspace(document.getElementById("mainContent"));
 }
@@ -802,12 +951,18 @@ function extractEnquiry() {
   showToast("AI Enquiry Assistant: Extracting requirements...");
 
   setTimeout(() => {
-    document.getElementById("chipProduct").textContent = "Stainless steel wall-mounted dispenser";
-    document.getElementById("chipQty").textContent = "25 units";
-    document.getElementById("chipAddon").textContent = "Standard mounting kit";
-    document.getElementById("chipLead").textContent = "Standard Lead Time";
+    const chipP = document.getElementById("chipProduct");
+    const chipQ = document.getElementById("chipQty");
+    const chipA = document.getElementById("chipAddon");
+    const chipL = document.getElementById("chipLead");
+
+    if (chipP) chipP.textContent = "Stainless steel wall-mounted dispenser";
+    if (chipQ) chipQ.textContent = "25 units";
+    if (chipA) chipA.textContent = "Standard mounting kit";
+    if (chipL) chipL.textContent = "Standard Lead Time";
+
     showToast("Extraction complete. Suggested ERP match ready.");
-  }, 500);
+  }, 400);
 }
 
 function confirmAIMatch() {
@@ -916,7 +1071,6 @@ function showCatalogModal(initialQuery) {
 
   document.body.appendChild(overlay);
 
-  // Esc listener
   overlay.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeCatalogModal();
   });
@@ -974,7 +1128,6 @@ function selectProductFromCatalog(code) {
   if (!product) return;
 
   if (targetLineForCatalog) {
-    // Replace existing line
     const line = currentQuote.lineItems.find(l => l.id === targetLineForCatalog);
     if (line) {
       line.erpCode = product.code;
@@ -986,7 +1139,6 @@ function selectProductFromCatalog(code) {
       line.status = "Confirmed";
     }
   } else {
-    // Add new line item
     const nextNo = currentQuote.lineItems.length + 1;
     currentQuote.lineItems.push({
       id: "line-" + Date.now(),
@@ -1017,6 +1169,8 @@ function closeCatalogModal() {
 // SCREEN 2: QUOTATION DASHBOARD
 // --------------------------------------------------------------------------
 function renderDashboard(container) {
+  const activeTotals = calculateTotals();
+
   container.innerHTML = `
     <!-- Dashboard Header -->
     <div class="workspace-top-bar">
@@ -1027,7 +1181,7 @@ function renderDashboard(container) {
         </div>
       </div>
       <div class="top-bar-actions">
-        <button class="btn btn-primary" onclick="switchScreen('workspace')">
+        <button class="btn btn-primary" onclick="createNewDraft()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           + Create New Quotation
         </button>
@@ -1095,15 +1249,15 @@ function renderDashboard(container) {
               <tr style="background-color: #f0fdf4;">
                 <td><strong class="draft-ref">${currentQuote.id}</strong></td>
                 <td>
-                  <strong>${currentQuote.companyName}</strong>
+                  <strong>${escapeHtml(currentQuote.companyName)}</strong>
                   <div style="font-size: 11px; color: var(--slate-500);">Current Active Workspace</div>
                 </td>
                 <td>${currentQuote.createdBy}</td>
-                <td>Just now</td>
+                <td>${currentQuote.lastSaved}</td>
                 <td style="text-align: right; font-family: var(--font-mono); font-weight: 600;">
-                  AED ${formatMoney(calculateTotals().grandTotal)}
+                  AED ${formatMoney(activeTotals.grandTotal)}
                 </td>
-                <td><span class="badge badge-warning">Awaiting Match</span></td>
+                <td><span class="badge ${activeTotals.hasPriceBelowCost ? 'badge-danger' : (activeTotals.hasUnmatchedItems ? 'badge-warning' : 'badge-info')}">${currentQuote.status}</span></td>
                 <td style="text-align: center;">
                   <button class="btn btn-primary btn-sm" onclick="switchScreen('workspace')">Resume</button>
                 </td>
@@ -1117,9 +1271,9 @@ function renderDashboard(container) {
                 <td>Sarah Chen</td>
                 <td>45 mins ago</td>
                 <td style="text-align: right; font-family: var(--font-mono);">AED 42,100.00</td>
-                <td><span class="badge badge-danger">2 Unmatched</span></td>
+                <td><span class="badge badge-danger">1 Blocker (Cost)</span></td>
                 <td style="text-align: center;">
-                  <button class="btn btn-secondary btn-sm" onclick="showToast('Loading DRAFT-2026-0039...')">Review</button>
+                  <button class="btn btn-secondary btn-sm" onclick="resumeDraft('DRAFT-2026-0039')">Resume</button>
                 </td>
               </tr>
               <tr>
@@ -1133,7 +1287,7 @@ function renderDashboard(container) {
                 <td style="text-align: right; font-family: var(--font-mono);">AED 1,450.00</td>
                 <td><span class="badge badge-info">Ready for Review</span></td>
                 <td style="text-align: center;">
-                  <button class="btn btn-teal btn-sm" onclick="showToast('Opening review mode...')">Validate</button>
+                  <button class="btn btn-secondary btn-sm" onclick="resumeDraft('DRAFT-2026-0035')">Resume</button>
                 </td>
               </tr>
               <tr>
@@ -1145,9 +1299,9 @@ function renderDashboard(container) {
                 <td>Alex Morgan</td>
                 <td>24 Oct 2026</td>
                 <td style="text-align: right; font-family: var(--font-mono);">AED 128,400.00</td>
-                <td><span class="badge badge-confirmed">ERP Confirmed</span></td>
+                <td><span class="badge badge-confirmed">ERP Confirmed (Demo)</span></td>
                 <td style="text-align: center;">
-                  <button class="btn btn-ghost btn-sm" onclick="showToast('Viewing confirmed ERP quote...')">View</button>
+                  <button class="btn btn-ghost btn-sm" onclick="showToast('Viewing historical ERP record...')">View</button>
                 </td>
               </tr>
             </tbody>
@@ -1164,16 +1318,16 @@ function renderDashboard(container) {
         </div>
         <div class="card-body" style="font-size: 11.5px; line-height: 1.6;">
           <div style="padding-bottom: 8px; border-bottom: 1px dashed var(--slate-200);">
-            <strong>Quotation ${currentQuote.id}</strong> updated with 4 line items by <em>Alex Morgan</em> (Just now)
+            <strong>Quotation ${currentQuote.id}</strong> modified by <em>Alex Morgan</em> (${currentQuote.lastSaved})
           </div>
           <div style="padding: 8px 0; border-bottom: 1px dashed var(--slate-200);">
             <strong>Product match confirmed</strong> for <code>MIM-SS-DISP-WM01</code> on DRAFT-2026-0041 by <em>Sarah Chen</em> (45 mins ago)
           </div>
           <div style="padding: 8px 0; border-bottom: 1px dashed var(--slate-200);">
-            <strong>QUOTE-ERP-9182</strong> confirmed to ERP General Ledger by <em>Tariq Al-Hashimi</em> (Yesterday)
+            <strong>QUOTE-ERP-9182</strong> confirmed to ERP General Ledger by <em>Tariq Al-Hashimi</em> (Historical)
           </div>
           <div style="padding-top: 8px;">
-            <strong>Credit check passed</strong> for Al-Futtaim Engineering Ltd (Approved by Finance)
+            <strong>Credit check passed</strong> for Al-Futtaim Engineering Ltd (Verified Debtors Account)
           </div>
         </div>
       </div>
@@ -1184,10 +1338,10 @@ function renderDashboard(container) {
         </div>
         <div class="card-body">
           <div style="background-color: var(--warning-bg); border: 1px solid var(--warning-border); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 8px; font-size: 11.5px;">
-            <strong>DRAFT-2026-0039:</strong> 2 SKUs unmapped to ERP master catalog. Finalisation blocked.
+            <strong>DRAFT-2026-0039:</strong> Custom Sensor Assembly Kit has unknown cost. ERP transmission blocked.
           </div>
           <div style="background-color: var(--danger-bg); border: 1px solid var(--danger-border); padding: 10px; border-radius: var(--radius-sm); font-size: 11.5px;">
-            <strong>DRAFT-2026-0042 (Current):</strong> Line 3 has unknown cost. Catalog match required before ERP confirmation.
+            <strong>DRAFT-2026-0042 (Active):</strong> Line 3 requires catalog matching. Cannot submit to ERP with unmatched items.
           </div>
         </div>
       </div>
@@ -1199,6 +1353,8 @@ function renderDashboard(container) {
 // SCREEN 3: PENDING DRAFTS
 // --------------------------------------------------------------------------
 function renderDrafts(container) {
+  const draftKeys = Object.keys(draftsStore);
+
   container.innerHTML = `
     <div class="workspace-top-bar">
       <div>
@@ -1208,7 +1364,7 @@ function renderDrafts(container) {
         </div>
       </div>
       <div class="top-bar-actions">
-        <button class="btn btn-primary" onclick="switchScreen('workspace')">+ New Quotation</button>
+        <button class="btn btn-primary" onclick="createNewDraft()">+ New Quotation</button>
       </div>
     </div>
 
@@ -1216,20 +1372,15 @@ function renderDrafts(container) {
     <div class="card" style="margin-bottom: 16px;">
       <div class="card-body" style="padding: 12px;">
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <input type="text" class="form-input" style="flex: 1; min-width: 220px;" placeholder="Search drafts by reference ID, customer name, contact person...">
-          <select class="form-select" style="width: 170px;">
-            <option>All Statuses</option>
-            <option>In Progress</option>
-            <option>Awaiting Confirmation</option>
-            <option>Ready for Review</option>
+          <input type="text" class="form-input" id="draftSearchInput" style="flex: 1; min-width: 220px;" 
+                 placeholder="Search drafts by reference ID, customer name, contact person..."
+                 oninput="filterDraftsTable()">
+          <select class="form-select" id="draftStatusFilter" style="width: 170px;" onchange="filterDraftsTable()">
+            <option value="All">All Statuses</option>
+            <option value="Draft">Draft</option>
+            <option value="Ready for Review">Ready for Review</option>
           </select>
-          <select class="form-select" style="width: 160px;">
-            <option>All Team Members</option>
-            <option>Alex Morgan</option>
-            <option>Sarah Chen</option>
-            <option>Tariq Al-Hashimi</option>
-          </select>
-          <button class="btn btn-secondary">Clear Filters</button>
+          <button class="btn btn-secondary" onclick="resetDraftFilters()">Clear Filters</button>
         </div>
       </div>
     </div>
@@ -1252,49 +1403,8 @@ function renderDrafts(container) {
                 <th style="text-align: center;">Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <tr style="background-color: #f8fafc;">
-                <td><input type="checkbox" checked></td>
-                <td><strong class="draft-ref">${currentQuote.id}</strong> (Active Workspace)</td>
-                <td>${currentQuote.customerAccount}</td>
-                <td><span class="badge badge-info">Debtors Ledger [D]</span></td>
-                <td>Just now</td>
-                <td>4 lines (AED ${formatMoney(calculateTotals().grandTotal)})</td>
-                <td><span class="badge badge-warning">1 Unresolved Item</span></td>
-                <td>Alex Morgan</td>
-                <td style="text-align: center;">
-                  <button class="btn btn-primary btn-sm" onclick="resumeDraft('${currentQuote.id}')">Resume</button>
-                  <button class="icon-btn" title="Delete draft" onclick="confirmDeleteDraft('${currentQuote.id}')">✕</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td><span class="draft-ref">DRAFT-2026-0039</span></td>
-                <td>Khansaheb Civil Engineering [ACC-44102]</td>
-                <td><span class="badge badge-info">Debtors Ledger [D]</span></td>
-                <td>45 mins ago</td>
-                <td>12 lines (AED 42,100.00)</td>
-                <td><span class="badge badge-danger">2 Unresolved Items</span></td>
-                <td>Sarah Chen</td>
-                <td style="text-align: center;">
-                  <button class="btn btn-secondary btn-sm" onclick="showToast('Resuming DRAFT-2026-0039...')">Resume</button>
-                  <button class="icon-btn" onclick="confirmDeleteDraft('DRAFT-2026-0039')">✕</button>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td><span class="draft-ref">DRAFT-2026-0035</span></td>
-                <td>Sobha Realty LLC [ACC-90112]</td>
-                <td><span class="badge badge-draft">General Ledger [G]</span></td>
-                <td>Yesterday 16:30</td>
-                <td>2 lines (AED 1,450.00)</td>
-                <td><span class="badge badge-confirmed">0 Unresolved</span></td>
-                <td>Tariq Al-Hashimi</td>
-                <td style="text-align: center;">
-                  <button class="btn btn-secondary btn-sm" onclick="showToast('Resuming DRAFT-2026-0035...')">Resume</button>
-                  <button class="icon-btn" onclick="confirmDeleteDraft('DRAFT-2026-0035')">✕</button>
-                </td>
-              </tr>
+            <tbody id="draftsTableBody">
+              ${renderDraftsRows(draftKeys)}
             </tbody>
           </table>
         </div>
@@ -1308,14 +1418,161 @@ function renderDrafts(container) {
   `;
 }
 
+function renderDraftsRows(keys) {
+  if (keys.length === 0) {
+    return `<tr><td colspan="9" style="text-align: center; padding: 24px; color: var(--slate-500);">No drafts match the selected filters.</td></tr>`;
+  }
+
+  return keys.map(k => {
+    const draft = draftsStore[k];
+    const isCurrent = (draft.id === currentQuote.id);
+
+    // Compute metrics for draft
+    let unmatchedCount = 0;
+    let unknownCostCount = 0;
+    let grandTotal = 0;
+
+    draft.lineItems.forEach(i => {
+      grandTotal += (i.qty * i.sellingPrice) * 1.05;
+      if (!i.erpCode) unmatchedCount++;
+      if (i.cost === null) unknownCostCount++;
+    });
+
+    let unresolvedBadge = `<span class="badge badge-confirmed">0 Unresolved</span>`;
+    if (unknownCostCount > 0) {
+      unresolvedBadge = `<span class="badge badge-danger">${unknownCostCount} Cost Blocker</span>`;
+    } else if (unmatchedCount > 0) {
+      unresolvedBadge = `<span class="badge badge-warning">${unmatchedCount} Unmatched</span>`;
+    }
+
+    return `
+      <tr style="${isCurrent ? 'background-color: #f8fafc;' : ''}">
+        <td><input type="checkbox" ${isCurrent ? 'checked' : ''}></td>
+        <td>
+          <strong class="draft-ref">${draft.id}</strong>
+          ${isCurrent ? '<span style="font-size: 10px; color: var(--primary); font-weight: 700; margin-left: 4px;">[ACTIVE]</span>' : ''}
+        </td>
+        <td>${escapeHtml(draft.customerAccount || draft.companyName)}</td>
+        <td>
+          <span class="badge ${draft.customerRoute === 'D' ? 'badge-info' : 'badge-draft'}">
+            ${draft.customerRoute === 'D' ? 'Debtors [D]' : 'General [G]'}
+          </span>
+        </td>
+        <td>${draft.lastSaved}</td>
+        <td class="font-mono">${draft.lineItems.length} lines (AED ${formatMoney(grandTotal)})</td>
+        <td>${unresolvedBadge}</td>
+        <td>${draft.createdBy.split(' ')[0]} ${draft.createdBy.split(' ')[1] || ''}</td>
+        <td style="text-align: center; white-space: nowrap;">
+          <button class="btn ${isCurrent ? 'btn-primary' : 'btn-secondary'} btn-sm" onclick="resumeDraft('${draft.id}')">Resume</button>
+          <button class="icon-btn" title="Delete draft" onclick="confirmDeleteDraft('${draft.id}')" style="display: inline-flex; vertical-align: middle;">✕</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function filterDraftsTable() {
+  const query = (document.getElementById("draftSearchInput")?.value || "").toLowerCase().trim();
+  const status = document.getElementById("draftStatusFilter")?.value || "All";
+
+  const matched = Object.keys(draftsStore).filter(k => {
+    const draft = draftsStore[k];
+    const matchesQ = !query || 
+      draft.id.toLowerCase().includes(query) || 
+      draft.companyName.toLowerCase().includes(query) || 
+      draft.contactPerson.toLowerCase().includes(query);
+    const matchesS = (status === "All") || (draft.status === status);
+    return matchesQ && matchesS;
+  });
+
+  const tbody = document.getElementById("draftsTableBody");
+  if (tbody) tbody.innerHTML = renderDraftsRows(matched);
+}
+
+function resetDraftFilters() {
+  const search = document.getElementById("draftSearchInput");
+  const select = document.getElementById("draftStatusFilter");
+  if (search) search.value = "";
+  if (select) select.value = "All";
+  filterDraftsTable();
+}
+
 function resumeDraft(id) {
-  showToast(`Draft ${id} resumed. Workspace restored.`);
+  // Save current active draft first
+  draftsStore[currentQuote.id] = JSON.parse(JSON.stringify(currentQuote));
+
+  if (draftsStore[id]) {
+    currentQuote = JSON.parse(JSON.stringify(draftsStore[id]));
+    localStorage.setItem("MIM_ACTIVE_DRAFT_ID", id);
+    localStorage.setItem("MIM_DRAFTS_STORE", JSON.stringify(draftsStore));
+    showToast(`Draft ${id} resumed. All customer details and lines restored.`);
+    switchScreen("workspace");
+  }
+}
+
+function createNewDraft() {
+  const newId = "DRAFT-2026-" + String(Math.floor(Math.random() * 9000) + 1000);
+  const newDraft = {
+    id: newId,
+    status: "Draft",
+    createdBy: "Alex Morgan (Sales Engineer)",
+    lastSaved: "Just now",
+    customerRoute: "D",
+    customerAccount: "Al-Futtaim Engineering Ltd [ACC-88219]",
+    companyName: "Al-Futtaim Engineering Ltd",
+    contactPerson: "Mr. Zaid Mansoor",
+    email: "z.mansoor@alfuttaim.ae",
+    phone: "+971 4 213 4400",
+    enquiryText: "",
+    enquiryExtracted: false,
+    leadTime: "2 - 3 Weeks from receipt of PO",
+    deliveryNotes: "Ex-works Jebel Ali Warehouse",
+    internalRemarks: "",
+    customerRemarks: "Prices valid for 30 calendar days.",
+    lineItems: [
+      {
+        id: "line-" + Date.now(),
+        lineNo: 1,
+        description: "New Product Item",
+        erpCode: null,
+        variant: "Standard specification",
+        qty: 1,
+        unit: "PCS",
+        sellingPrice: 100.00,
+        cost: null,
+        status: "Awaiting",
+        notes: "Catalog search required"
+      }
+    ]
+  };
+
+  draftsStore[newId] = newDraft;
+  currentQuote = newDraft;
+  localStorage.setItem("MIM_ACTIVE_DRAFT_ID", newId);
+  localStorage.setItem("MIM_DRAFTS_STORE", JSON.stringify(draftsStore));
+  showToast(`Created new draft: ${newId}`);
   switchScreen("workspace");
 }
 
 function confirmDeleteDraft(id) {
+  if (Object.keys(draftsStore).length <= 1) {
+    showToast("Cannot delete the only remaining draft.");
+    return;
+  }
+
   if (confirm(`Are you sure you want to delete ${id}? This action will remove all line items and customer notes and cannot be undone.`)) {
+    delete draftsStore[id];
+    
+    // If deleted the current active draft, switch to another
+    if (currentQuote.id === id) {
+      const remainingId = Object.keys(draftsStore)[0];
+      currentQuote = JSON.parse(JSON.stringify(draftsStore[remainingId]));
+      localStorage.setItem("MIM_ACTIVE_DRAFT_ID", remainingId);
+    }
+
+    localStorage.setItem("MIM_DRAFTS_STORE", JSON.stringify(draftsStore));
     showToast(`Draft ${id} deleted.`);
+    renderDrafts(document.getElementById("mainContent"));
   }
 }
 
@@ -1384,7 +1641,7 @@ function renderPreview(container) {
               </tr>
               <tr>
                 <td style="color: var(--slate-500);">Validity:</td>
-                <td>30 Days (28 Nov 2026)</td>
+                <td>30 Days</td>
               </tr>
               <tr>
                 <td style="color: var(--slate-500);">Prepared By:</td>
@@ -1400,17 +1657,16 @@ function renderPreview(container) {
             <div style="font-weight: 700; text-transform: uppercase; margin-bottom: 4px; color: var(--navy-900);">
               Quotation Issued To:
             </div>
-            <strong>${currentQuote.companyName}</strong><br>
-            Account: ${currentQuote.customerAccount}<br>
-            Attention: ${currentQuote.contactPerson}<br>
-            Email: ${currentQuote.email} | Tel: ${currentQuote.phone}
+            <strong>${escapeHtml(currentQuote.companyName)}</strong><br>
+            Account: ${escapeHtml(currentQuote.customerAccount || 'General Ledger Recipient')}<br>
+            Attention: ${escapeHtml(currentQuote.contactPerson)}<br>
+            Email: ${escapeHtml(currentQuote.email)} | Tel: ${escapeHtml(currentQuote.phone)}
           </div>
           <div>
             <div style="font-weight: 700; text-transform: uppercase; margin-bottom: 4px; color: var(--navy-900);">
               Project & Delivery Site:
             </div>
-            Al-Futtaim Engineering MEP Logistics Central Hub<br>
-            Jebel Ali Central Facility, Dubai, UAE<br>
+            ${escapeHtml(currentQuote.deliveryNotes)}<br>
             Payment Terms: 30 Days Net (Standard Credit)
           </div>
         </div>
@@ -1467,15 +1723,15 @@ function renderPreview(container) {
         </div>
 
         <div class="amount-words-box">
-          <strong>Amount in Words:</strong> Six Thousand Thirty-Two UAE Dirhams and 25/100 Only.
+          <strong>Currency:</strong> United Arab Emirates Dirham (AED) • Applicable UAE VAT: 5.0%
         </div>
 
         <!-- Commercial Terms -->
         <div class="terms-section">
           <div style="font-weight: 700; color: var(--navy-900); margin-bottom: 6px;">Commercial Terms & Delivery:</div>
-          <div>• <strong>Lead Time:</strong> ${currentQuote.leadTime}</div>
-          <div>• <strong>Delivery Terms:</strong> ${currentQuote.deliveryNotes}</div>
-          <div>• <strong>Warranty:</strong> ${currentQuote.customerRemarks}</div>
+          <div>• <strong>Lead Time:</strong> ${escapeHtml(currentQuote.leadTime)}</div>
+          <div>• <strong>Delivery Terms:</strong> ${escapeHtml(currentQuote.deliveryNotes)}</div>
+          <div>• <strong>Warranty:</strong> ${escapeHtml(currentQuote.customerRemarks)}</div>
           <div style="margin-top: 6px; font-size: 10px; color: var(--slate-500);">
             1. Prices valid for 30 calendar days. 2. This draft quotation is subject to final ERP booking and stock confirmation. 3. UAE VAT Registration TRN: 100293847500003.
           </div>
@@ -1485,7 +1741,7 @@ function renderPreview(container) {
         <div class="signatory-row">
           <div class="sign-box">
             Prepared By:<br>
-            <strong>${currentQuote.createdBy}</strong><br>
+            <strong>${escapeHtml(currentQuote.createdBy)}</strong><br>
             MIM Industrial Solutions LLC
           </div>
           <div class="sign-box" style="text-align: right;">
@@ -1499,10 +1755,12 @@ function renderPreview(container) {
 }
 
 // --------------------------------------------------------------------------
-// MODAL: PREPARE FOR ERP CONFIRMATION
+// MODAL: PREPARE FOR ERP CONFIRMATION (SAFETY GUARDED)
 // --------------------------------------------------------------------------
 function openErpConfirmModal() {
   const totals = calculateTotals();
+  const isBlocked = totals.hasPriceBelowCost || totals.hasUnknownCost || totals.hasUnmatchedItems;
+
   const overlay = document.createElement("div");
   overlay.className = "modal-overlay";
   overlay.id = "erpModalOverlay";
@@ -1525,28 +1783,37 @@ function openErpConfirmModal() {
         <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
           <label style="display: flex; align-items: center; gap: 8px;">
             <input type="checkbox" checked disabled>
-            <span>Customer route verified: <strong>Debtors Ledger [D]</strong> (Account: ACC-88219)</span>
+            <span>Customer route verified: <strong>${currentQuote.customerRoute === 'D' ? 'Debtors Ledger [D]' : 'General Ledger [G]'}</strong></span>
           </label>
           <label style="display: flex; align-items: center; gap: 8px;">
-            <input type="checkbox" ${totals.hasUnmatchedItems ? '' : 'checked'} id="chkCatalog">
+            <input type="checkbox" ${totals.hasUnmatchedItems ? '' : 'checked'} disabled>
             <span>All ${currentQuote.lineItems.length} line items confirmed against ERP product master</span>
           </label>
           <label style="display: flex; align-items: center; gap: 8px;">
-            <input type="checkbox" ${totals.hasUnknownCost ? '' : 'checked'} id="chkCost">
-            <span>Cost basis and margin verified (UAE VAT 5% compliant)</span>
+            <input type="checkbox" ${totals.hasUnknownCost ? '' : 'checked'} disabled>
+            <span>Cost basis available and recorded in catalog</span>
           </label>
           <label style="display: flex; align-items: center; gap: 8px;">
-            <input type="checkbox" checked id="chkTerms">
-            <span>Commercial lead time reviewed (${currentQuote.leadTime})</span>
+            <input type="checkbox" ${totals.hasPriceBelowCost ? '' : 'checked'} disabled>
+            <span>No line item priced below recorded cost</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" checked disabled>
+            <span>Commercial lead time reviewed (${escapeHtml(currentQuote.leadTime)})</span>
           </label>
         </div>
 
-        ${(totals.hasUnmatchedItems || totals.hasUnknownCost) ? `
-          <div style="margin-top: 14px; padding: 8px 12px; background-color: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: var(--radius-sm); font-size: 11.5px; color: var(--danger);">
-            ✕ <strong>Action Required:</strong> Draft contains unmatched items or unconfirmed costs. Resolve in quotation workspace prior to ERP transmission.
+        ${isBlocked ? `
+          <div style="margin-top: 14px; padding: 10px 14px; background-color: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: var(--radius-sm); font-size: 11.5px; color: var(--danger);">
+            ✕ <strong>Action Blocked:</strong> Cannot proceed to ERP confirmation due to the following issues:
+            <ul style="margin: 6px 0 0 16px;">
+              ${totals.hasPriceBelowCost ? '<li>One or more items are priced below cost.</li>' : ''}
+              ${totals.hasUnknownCost ? '<li>One or more items have unknown cost.</li>' : ''}
+              ${totals.hasUnmatchedItems ? '<li>One or more items are awaiting ERP catalog matching.</li>' : ''}
+            </ul>
           </div>
         ` : `
-          <div style="margin-top: 14px; padding: 8px 12px; background-color: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius-sm); font-size: 11.5px; color: var(--success);">
+          <div style="margin-top: 14px; padding: 10px 14px; background-color: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius-sm); font-size: 11.5px; color: var(--success);">
             ✓ All checks passed! Ready for live ERP connector handshake.
           </div>
         `}
@@ -1554,7 +1821,7 @@ function openErpConfirmModal() {
 
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeErpModal()">Return to Workspace</button>
-        <button class="btn btn-primary" onclick="simulateErpHandshake()">
+        <button class="btn btn-primary" ${isBlocked ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''} onclick="${isBlocked ? '' : 'simulateErpHandshake()'}">
           Simulate ERP Confirmation Handshake
         </button>
       </div>
@@ -1568,8 +1835,8 @@ function simulateErpHandshake() {
   closeErpModal();
   showToast("Transmitting quotation payload to MIM ERP Connector (Simulation)...");
   setTimeout(() => {
-    alert("Simulated ERP Confirmation Complete!\n\nNote: In Phase 2 this triggers the real Windows ERP connector. No database records have been modified in this UI prototype.");
-  }, 600);
+    alert("Simulated Pre-Flight Validation Complete!\n\nIn Phase 2, this payload connects to the Windows ERP desktop connector service.\n\nNotice: This is a UI prototype. No ERP records have been committed or official quotation numbers generated.");
+  }, 500);
 }
 
 function closeErpModal() {
@@ -1582,7 +1849,10 @@ function closeErpModal() {
 // --------------------------------------------------------------------------
 function saveDraft() {
   currentQuote.lastSaved = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  localStorage.setItem("MIM_CURRENT_DRAFT", JSON.stringify(currentQuote));
+  draftsStore[currentQuote.id] = JSON.parse(JSON.stringify(currentQuote));
+  localStorage.setItem("MIM_DRAFTS_STORE", JSON.stringify(draftsStore));
+  localStorage.setItem("MIM_ACTIVE_DRAFT_ID", currentQuote.id);
+
   const el = document.getElementById("lastSavedText");
   if (el) el.textContent = currentQuote.lastSaved;
   showToast(`Draft ${currentQuote.id} saved to local storage.`);
@@ -1591,7 +1861,7 @@ function saveDraft() {
 function runValidationCheck(showAlert = false) {
   const totals = calculateTotals();
   if (totals.hasPriceBelowCost) {
-    if (showAlert) alert("Validation Blocked: One or more line items are priced below cost.");
+    if (showAlert) alert("Validation Blocked: One or more line items are priced below cost. Adjust prices before finalizing.");
     return false;
   }
   if (totals.hasUnknownCost || totals.hasUnmatchedItems) {
@@ -1622,7 +1892,8 @@ function showToast(msg) {
 }
 
 function formatMoney(num) {
-  return (num || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (num === null || num === undefined || isNaN(num)) return "0.00";
+  return num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function escapeHtml(str) {
