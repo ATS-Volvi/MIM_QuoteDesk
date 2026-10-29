@@ -91,3 +91,19 @@ npx serve .
   - Secondary Action / Verified: Deep Teal (`#0D9488`)
   - Surfaces: Cool Slate Canvas (`#F8FAFC`, `#FFFFFF`)
   - Semantic Status: Emerald (`#059669`), Amber (`#D97706`), Crimson (`#E11D48`)
+
+---
+
+## 6. Phase 2: Read-Only ERP Connector Specification
+
+Phase 2 establishes the architectural blueprint, data mappings, security guardrails, and API contracts for safely integrating QuoteFlow AI with the on-premise MIM Windows ERP in a strictly read-only mode.
+
+### Specification Documents:
+- [Discovery Checklist & Questionnaire](file:///docs/phase-2/ERP_DISCOVERY_CHECKLIST.md): Technical discovery audit and questionnaire for the ERP administrator.
+- [Connector Architecture](file:///docs/phase-2/ERP_CONNECTOR_ARCHITECTURE.md): Integration topology, evaluation of options, and the Windows Service Bridge Agent pattern.
+- [API Contract](file:///docs/phase-2/ERP_CONNECTOR_API_CONTRACT.md): Versioned REST contract (`/api/v1/erp/...`) for products, customers, pricing, and health.
+- [Data Mapping Specification](file:///docs/phase-2/ERP_DATA_MAPPING.md): Semantic mappings between QuoteFlow state, Bridge Agent DTOs, and candidate ERP database columns.
+- [Security Model](file:///docs/phase-2/ERP_SECURITY_MODEL.md): Least-privilege permissions, Windows DPAPI secret storage, network boundaries, and read-only enforcement.
+- [Test Plan](file:///docs/phase-2/ERP_CONNECTOR_TEST_PLAN.md): 13 mandatory test scenarios covering normal operation, fault injection, and mutation prohibition.
+- [Open Decisions](file:///docs/phase-2/OPEN_DECISIONS.md): Structured decision log tracking unresolved questions and recommended defaults.
+
