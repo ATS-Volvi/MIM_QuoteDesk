@@ -107,3 +107,26 @@ Phase 2 establishes the architectural blueprint, data mappings, security guardra
 - [Test Plan](file:///docs/phase-2/ERP_CONNECTOR_TEST_PLAN.md): 13 mandatory test scenarios covering normal operation, fault injection, and mutation prohibition.
 - [Open Decisions](file:///docs/phase-2/OPEN_DECISIONS.md): Structured decision log tracking unresolved questions and recommended defaults.
 
+---
+
+## 7. Phase 3: Read-Only Connector Foundation & Verification
+
+Phase 3 establishes the technology-neutral connector interface, in-memory mock adapter, and security boundaries to prepare for safe ERP integration without risking production systems.
+
+- **Readiness Report & Checklist:** [Phase 3 Readiness Report](file:///docs/phase-3/PHASE_3_READINESS_REPORT.md)
+- **Connector Foundation Code:** [`src/connector/erpConnector.js`](file:///src/connector/erpConnector.js)
+- **Automated Contract Test Suite:** [`tests/erp_connector_contract_test.js`](file:///tests/erp_connector_contract_test.js)
+
+### Running All Automated Test Suites:
+```bash
+# 1. Calculation & Financial Logic Tests (8/8 passed)
+node tests/audit_calculations_test.js
+
+# 2. Workflow & Multi-Draft State Tests (All passed)
+node tests/workflow_integration_test.js
+
+# 3. ERP Read-Only Connector Contract Tests (13/13 passed)
+node tests/erp_connector_contract_test.js
+```
+
+
