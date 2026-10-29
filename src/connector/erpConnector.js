@@ -114,6 +114,7 @@
       unit_of_measure: 'PCS',
       is_active: true,
       match_type: 'EXACT_CODE',
+      variant: 'Standard 20mm Galvanized (3m)',
       specifications: {
         material: 'Galvanized Steel',
         diameter_mm: 20.0,
@@ -122,11 +123,153 @@
       },
       inventory_status: {
         is_stocked: true,
+        stock_text: 'In Stock (840 PCS at Dubai WH)',
         lead_time_days: 1
       },
       pricing_summary: {
         currency: 'AED',
         list_price: 28.50,
+        unit: 'PCS'
+      }
+    },
+    {
+      product_code: 'MIM-SS-DISP-WM01',
+      description: 'Stainless Steel Wall-Mounted Liquid Soap Dispenser 1000ml',
+      category: 'DISPENSERS',
+      unit_of_measure: 'PCS',
+      is_active: true,
+      match_type: 'EXACT_CODE',
+      variant: '304 Grade Brushed Satin, Lockable',
+      specifications: {
+        material: 'AISI 304 Stainless Steel',
+        finish: 'Brushed Satin',
+        capacity_ml: 1000,
+        lockable: true
+      },
+      inventory_status: {
+        is_stocked: true,
+        stock_text: 'In Stock (142 PCS at Jebel Ali WH)',
+        lead_time_days: 2
+      },
+      pricing_summary: {
+        currency: 'AED',
+        list_price: 185.00,
+        unit: 'PCS'
+      }
+    },
+    {
+      product_code: 'MIM-SS-DISP-WM02',
+      description: 'Stainless Steel Wall-Mounted Foam Dispenser 800ml Satin Finish',
+      category: 'DISPENSERS',
+      unit_of_measure: 'PCS',
+      is_active: true,
+      match_type: 'SIMILAR_DESCRIPTION',
+      variant: '316 Marine Grade Mirror Finish',
+      specifications: {
+        material: 'AISI 316 Marine Grade',
+        finish: 'Mirror Polish',
+        capacity_ml: 800
+      },
+      inventory_status: {
+        is_stocked: true,
+        stock_text: 'In Stock (38 PCS)',
+        lead_time_days: 3
+      },
+      pricing_summary: {
+        currency: 'AED',
+        list_price: 220.00,
+        unit: 'PCS'
+      }
+    },
+    {
+      product_code: 'MIM-ACC-MK02',
+      description: 'Heavy Duty Standard Wall Mounting Kit',
+      category: 'HARDWARE',
+      unit_of_measure: 'SET',
+      is_active: true,
+      match_type: 'EXACT_CODE',
+      variant: 'Series A-300 Heavy Duty Anchors & Bracket',
+      specifications: {
+        anchors: 'Heavy Duty Expandable M8',
+        bracket: 'Galvanized Carbon Steel'
+      },
+      inventory_status: {
+        is_stocked: true,
+        stock_text: 'In Stock (520 SETS)',
+        lead_time_days: 1
+      },
+      pricing_summary: {
+        currency: 'AED',
+        list_price: 35.00,
+        unit: 'SET'
+      }
+    },
+    {
+      product_code: 'MIM-DISP-KEY-T01',
+      description: 'Triangular Tamper-Proof Security Key Spare for Wall Dispensers',
+      category: 'SPARES',
+      unit_of_measure: 'PCS',
+      is_active: true,
+      match_type: 'SIMILAR_DESCRIPTION',
+      variant: 'Zinc Alloy Standard Triangle 8mm',
+      specifications: {
+        key_type: 'Triangular 8mm socket',
+        material: 'Die-cast Zinc Alloy'
+      },
+      inventory_status: {
+        is_stocked: true,
+        stock_text: 'In Stock (84 PCS)',
+        lead_time_days: 1
+      },
+      pricing_summary: {
+        currency: 'AED',
+        list_price: 15.00,
+        unit: 'PCS'
+      }
+    },
+    {
+      product_code: 'MIM-VALVE-NZ04',
+      description: 'Replacement Dispenser Nozzle & Valve',
+      category: 'SPARES',
+      unit_of_measure: 'PCS',
+      is_active: true,
+      match_type: 'EXACT_CODE',
+      variant: 'Silicone Anti-Drip Valve Core, Sanitary Grade',
+      specifications: {
+        valve_type: 'Silicone Duckbill Anti-Drip',
+        grade: 'FDA Food/Medical Grade'
+      },
+      inventory_status: {
+        is_stocked: true,
+        stock_text: 'In Stock (210 PCS)',
+        lead_time_days: 1
+      },
+      pricing_summary: {
+        currency: 'AED',
+        list_price: 17.00,
+        unit: 'PCS'
+      }
+    },
+    {
+      product_code: 'MIM-SS-DISP-FR01',
+      description: 'Floor Standing Sanitizer Dispenser SS304 Heavy Duty',
+      category: 'DISPENSERS',
+      unit_of_measure: 'PCS',
+      is_active: true,
+      match_type: 'SIMILAR_DESCRIPTION',
+      variant: 'Base weighted 12kg, Anti-topple',
+      specifications: {
+        material: 'AISI 304 Stainless Steel',
+        base_weight_kg: 12.0
+      },
+      inventory_status: {
+        is_stocked: true,
+        stock_text: 'Low Stock (4 PCS)',
+        lead_time_days: 7
+      },
+      pricing_summary: {
+        currency: 'AED',
+        list_price: 420.00,
         unit: 'PCS'
       }
     },
@@ -137,9 +280,11 @@
       unit_of_measure: 'PCS',
       is_active: false, // Discontinued item
       match_type: 'EXACT_CODE',
+      variant: 'Legacy Gen-1 Dispenser',
       specifications: {},
       inventory_status: {
         is_stocked: false,
+        stock_text: 'Discontinued / Out of Stock',
         lead_time_days: 0
       },
       pricing_summary: {
@@ -156,6 +301,9 @@
       account_type: 'DEBTORS_LEDGER',
       legal_name: 'Al-Futtaim Engineering & Technologies LLC',
       trade_name: 'Al-Futtaim Engineering',
+      contact_person: 'Mr. Zaid Mansoor',
+      email: 'z.mansoor@alfuttaim.ae',
+      phone: '+971 4 213 4400',
       tax_registration_number: '100293847200003',
       status: 'ACTIVE',
       credit_status: 'APPROVED',
@@ -174,6 +322,9 @@
       account_type: 'DEBTORS_LEDGER',
       legal_name: 'Khansaheb Civil Engineering LLC',
       trade_name: 'Khansaheb',
+      contact_person: 'Eng. Tariq Khansaheb',
+      email: 'tariq@khansaheb.ae',
+      phone: '+971 4 333 1200',
       tax_registration_number: '100348291000003',
       status: 'ACTIVE',
       credit_status: 'APPROVED',
@@ -188,14 +339,59 @@
       currency: 'AED'
     },
     {
+      account_id: 'ACC-90112',
+      account_type: 'DEBTORS_LEDGER',
+      legal_name: 'Sobha Realty LLC',
+      trade_name: 'Sobha Realty',
+      contact_person: 'Mr. Rajiv Menon',
+      email: 'rajiv@sobharealty.com',
+      phone: '+971 4 423 8900',
+      tax_registration_number: '100492817300003',
+      status: 'ACTIVE',
+      credit_status: 'APPROVED',
+      default_payment_terms: '30 Days Net',
+      default_price_list_id: 'PL-STANDARD-2026',
+      billing_address: {
+        street: 'Sobha Hartland, Nad Al Sheba',
+        city: 'Dubai',
+        country: 'United Arab Emirates',
+        po_box: '3412'
+      },
+      currency: 'AED'
+    },
+    {
+      account_id: 'ACC-12093',
+      account_type: 'DEBTORS_LEDGER',
+      legal_name: 'Dutco Balfour Beatty LLC',
+      trade_name: 'Dutco Balfour Beatty',
+      contact_person: 'Mr. Kevin Clark',
+      email: 'k.clark@dutco.ae',
+      phone: '+971 4 885 1100',
+      tax_registration_number: '100582910400003',
+      status: 'ACTIVE',
+      credit_status: 'APPROVED',
+      default_payment_terms: '60 Days PDC',
+      default_price_list_id: 'PL-CONTRACTOR-2026',
+      billing_address: {
+        street: 'Jebel Ali Industrial Area 1',
+        city: 'Dubai',
+        country: 'United Arab Emirates',
+        po_box: '8944'
+      },
+      currency: 'AED'
+    },
+    {
       account_id: 'ACC-HOLD-09',
       account_type: 'DEBTORS_LEDGER',
       legal_name: 'Stalled Commercial Contractors LLC',
       trade_name: 'Stalled Commercial',
+      contact_person: 'Mr. Nabil Dawood',
+      email: 'nabil@stalledcontractors.ae',
+      phone: '+971 4 991 2233',
       tax_registration_number: '100998877600003',
       status: 'ON_HOLD',
       credit_status: 'CREDIT_HOLD',
-      default_payment_terms: 'Cash on Delivery Only',
+      default_payment_terms: 'Cash on Delivery Only (Strict)',
       default_price_list_id: 'PL-STANDARD-2026',
       billing_address: {
         street: 'Al Quoz Industrial 3',
@@ -221,7 +417,7 @@
       },
       costing: {
         recorded_cost: 115.00,
-        cost_type: 'WEIGHTED_AVERAGE_COST', // Candidate valuation method
+        cost_type: 'WEIGHTED_AVERAGE_COST',
         cost_timestamp: '2026-10-28T18:00:00Z',
         is_cost_stale: false,
         cost_approval_status: 'APPROVED'
@@ -231,6 +427,31 @@
         last_quoted_date: '2026-09-15',
         variance_indicator: 'HIGHER_THAN_LAST_QUOTE',
         variance_percent: 2.22
+      }
+    },
+    'CBL-4C-025-CU': {
+      product_code: 'CBL-4C-025-CU',
+      currency: 'AED',
+      unit_of_measure: 'MTR',
+      pricing: {
+        standard_list_price: 210.00,
+        customer_special_price: 198.00,
+        price_list_id: 'PL-CONTRACTOR-2026',
+        price_list_name: 'General MEP Contractors 2026',
+        effective_from: '2026-01-01'
+      },
+      costing: {
+        recorded_cost: 168.00,
+        cost_type: 'WEIGHTED_AVERAGE_COST',
+        cost_timestamp: '2026-10-28T18:00:00Z',
+        is_cost_stale: false,
+        cost_approval_status: 'APPROVED'
+      },
+      historical_benchmarks: {
+        last_quoted_price: 205.00,
+        last_quoted_date: '2026-09-10',
+        variance_indicator: 'HIGHER_THAN_LAST_QUOTE',
+        variance_percent: 2.44
       }
     },
     'EMT-CON-020-GI': {
@@ -257,6 +478,141 @@
         variance_indicator: 'HIGHER_THAN_LAST_QUOTE',
         variance_percent: 1.96
       }
+    },
+    'MIM-SS-DISP-WM01': {
+      product_code: 'MIM-SS-DISP-WM01',
+      currency: 'AED',
+      unit_of_measure: 'PCS',
+      pricing: {
+        standard_list_price: 185.00,
+        customer_special_price: 180.00,
+        price_list_id: 'PL-CONTRACTOR-2026',
+        price_list_name: 'General Commercial 2026',
+        effective_from: '2026-01-01'
+      },
+      costing: {
+        recorded_cost: 115.00,
+        cost_type: 'WEIGHTED_AVERAGE_COST',
+        cost_timestamp: '2026-10-28T18:00:00Z',
+        is_cost_stale: false,
+        cost_approval_status: 'APPROVED'
+      },
+      historical_benchmarks: {
+        last_quoted_price: 185.00,
+        last_quoted_date: '2026-09-01',
+        variance_indicator: 'MATCHES_LAST_QUOTE',
+        variance_percent: 0.0
+      }
+    },
+    'MIM-SS-DISP-WM02': {
+      product_code: 'MIM-SS-DISP-WM02',
+      currency: 'AED',
+      unit_of_measure: 'PCS',
+      pricing: {
+        standard_list_price: 220.00,
+        customer_special_price: 210.00,
+        price_list_id: 'PL-CONTRACTOR-2026',
+        price_list_name: 'General Commercial 2026',
+        effective_from: '2026-01-01'
+      },
+      costing: {
+        recorded_cost: 142.50,
+        cost_type: 'WEIGHTED_AVERAGE_COST',
+        cost_timestamp: '2026-10-28T18:00:00Z',
+        is_cost_stale: false,
+        cost_approval_status: 'APPROVED'
+      },
+      historical_benchmarks: null
+    },
+    'MIM-ACC-MK02': {
+      product_code: 'MIM-ACC-MK02',
+      currency: 'AED',
+      unit_of_measure: 'SET',
+      pricing: {
+        standard_list_price: 35.00,
+        customer_special_price: 32.00,
+        price_list_id: 'PL-CONTRACTOR-2026',
+        price_list_name: 'General Commercial 2026',
+        effective_from: '2026-01-01'
+      },
+      costing: {
+        recorded_cost: 18.00,
+        cost_type: 'WEIGHTED_AVERAGE_COST',
+        cost_timestamp: '2026-10-28T18:00:00Z',
+        is_cost_stale: false,
+        cost_approval_status: 'APPROVED'
+      },
+      historical_benchmarks: {
+        last_quoted_price: 35.00,
+        last_quoted_date: '2026-08-15',
+        variance_indicator: 'MATCHES_LAST_QUOTE',
+        variance_percent: 0.0
+      }
+    },
+    'MIM-DISP-KEY-T01': {
+      product_code: 'MIM-DISP-KEY-T01',
+      currency: 'AED',
+      unit_of_measure: 'PCS',
+      pricing: {
+        standard_list_price: 15.00,
+        customer_special_price: 14.00,
+        price_list_id: 'PL-STANDARD-2026',
+        price_list_name: 'Spares Catalog 2026',
+        effective_from: '2026-01-01'
+      },
+      costing: {
+        recorded_cost: 6.20,
+        cost_type: 'WEIGHTED_AVERAGE_COST',
+        cost_timestamp: '2026-10-20T18:00:00Z',
+        is_cost_stale: false,
+        cost_approval_status: 'APPROVED'
+      },
+      historical_benchmarks: null
+    },
+    'MIM-VALVE-NZ04': {
+      product_code: 'MIM-VALVE-NZ04',
+      currency: 'AED',
+      unit_of_measure: 'PCS',
+      pricing: {
+        standard_list_price: 17.00,
+        customer_special_price: 16.50,
+        price_list_id: 'PL-STANDARD-2026',
+        price_list_name: 'Spares Catalog 2026',
+        effective_from: '2026-01-01'
+      },
+      costing: {
+        recorded_cost: 9.50,
+        cost_type: 'WEIGHTED_AVERAGE_COST',
+        cost_timestamp: '2026-10-25T18:00:00Z',
+        is_cost_stale: false,
+        cost_approval_status: 'APPROVED'
+      },
+      historical_benchmarks: {
+        last_quoted_price: 16.00,
+        last_quoted_date: '2026-07-10',
+        variance_indicator: 'HIGHER_THAN_LAST_QUOTE',
+        variance_percent: 6.25
+      }
+    },
+    'MIM-SS-DISP-FR01': {
+      product_code: 'MIM-SS-DISP-FR01',
+      currency: 'AED',
+      unit_of_measure: 'PCS',
+      pricing: {
+        standard_list_price: 420.00,
+        customer_special_price: 390.00,
+        price_list_id: 'PL-CONTRACTOR-2026',
+        price_list_name: 'Commercial Dispensers 2026',
+        effective_from: '2026-01-01'
+      },
+      costing: {
+        recorded_cost: 295.00,
+        cost_type: 'WEIGHTED_AVERAGE_COST',
+        cost_timestamp: '2026-10-28T18:00:00Z',
+        is_cost_stale: false,
+        cost_approval_status: 'APPROVED'
+      },
+      historical_benchmarks: null
     },
     'CBL-NO-COST': {
       product_code: 'CBL-NO-COST',
@@ -370,7 +726,8 @@
           if (query) {
             const inCode = item.product_code.toLowerCase().includes(query);
             const inDesc = item.description.toLowerCase().includes(query);
-            return inCode || inDesc;
+            const inVariant = item.variant ? item.variant.toLowerCase().includes(query) : false;
+            return inCode || inDesc || inVariant;
           }
 
           return true;

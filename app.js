@@ -242,6 +242,17 @@ const ERP_CATALOG = [
   }
 ];
 
+// --------------------------------------------------------------------------
+// ERP Connector Foundation (Mock Mode)
+// --------------------------------------------------------------------------
+const erpConnector = (typeof MIM_ERP !== "undefined" && MIM_ERP.createErpConnector)
+  ? MIM_ERP.createErpConnector({ simulatedLatencyMs: 60 })
+  : (typeof require !== "undefined" ? require("./src/connector/erpConnector").createErpConnector({ simulatedLatencyMs: 60 }) : null);
+
+// Asynchronous Request Sequence Tracking (Prevents stale responses)
+let productSearchSeq = 0;
+let customerSearchSeq = 0;
+
 // In-Memory Drafts Storage
 let draftsStore = JSON.parse(JSON.stringify(INITIAL_DRAFTS));
 let currentQuote = JSON.parse(JSON.stringify(draftsStore["DRAFT-2026-0042"]));
@@ -382,23 +393,34 @@ function renderWorkspace(container) {
           <div class="form-grid">
             ${currentQuote.customerRoute === 'D' ? `
               <div class="form-group col-span-2">
-                <label class="form-label">Searchable Customer Account *</label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label class="form-label" style="margin-bottom: 0;">Verified Debtors Account *</label>
+                  <button type="button" class="btn btn-secondary btn-sm" style="font-size: 11px; padding: 2px 8px;" onclick="openCustomerSearchModal()">
+                    🔍 Search Debtors (Mock)
+                  </button>
+                </div>
                 <select class="form-select" id="customerAccountSelect" onchange="handleAccountChange(this.value)">
-                  <option value="Al-Futtaim Engineering Ltd [ACC-88219]" ${currentQuote.customerAccount.includes('ACC-88219') ? 'selected' : ''}>Al-Futtaim Engineering Ltd — ACC-88219 (Credit Active)</option>
-                  <option value="Khansaheb Civil Engineering [ACC-44102]" ${currentQuote.customerAccount.includes('ACC-44102') ? 'selected' : ''}>Khansaheb Civil Engineering — ACC-44102</option>
-                  <option value="Dutco Balfour Beatty [ACC-12093]" ${currentQuote.customerAccount.includes('ACC-12093') ? 'selected' : ''}>Dutco Balfour Beatty — ACC-12093</option>
-                  <option value="Sobha Realty LLC [ACC-90112]" ${currentQuote.customerAccount.includes('ACC-90112') ? 'selected' : ''}>Sobha Realty LLC — ACC-90112</option>
+                  <option value="Al-Futtaim Engineering Ltd [ACC-88219]" ${currentQuote.customerAccount && currentQuote.customerAccount.includes('ACC-88219') ? 'selected' : ''}>Al-Futtaim Engineering Ltd — ACC-88219 (Credit Active)</option>
+                  <option value="Khansaheb Civil Engineering [ACC-44102]" ${currentQuote.customerAccount && currentQuote.customerAccount.includes('ACC-44102') ? 'selected' : ''}>Khansaheb Civil Engineering — ACC-44102</option>
+                  <option value="Dutco Balfour Beatty [ACC-12093]" ${currentQuote.customerAccount && currentQuote.customerAccount.includes('ACC-12093') ? 'selected' : ''}>Dutco Balfour Beatty — ACC-12093</option>
+                  <option value="Sobha Realty LLC [ACC-90112]" ${currentQuote.customerAccount && currentQuote.customerAccount.includes('ACC-90112') ? 'selected' : ''}>Sobha Realty LLC — ACC-90112</option>
+                  <option value="Stalled Commercial Contractors LLC [ACC-HOLD-09]" ${currentQuote.customerAccount && currentQuote.customerAccount.includes('ACC-HOLD-09') ? 'selected' : ''}>Stalled Commercial Contractors — ACC-HOLD-09 (Credit Hold)</option>
                 </select>
+                ${(currentQuote.customerCreditStatus === 'CREDIT_HOLD' || (currentQuote.customerAccount && currentQuote.customerAccount.includes('ACC-HOLD-09'))) ? `
+                  <div class="warning-banner-box" style="margin-top: 6px;">
+                    ⚠️ <strong>Account on Credit Hold:</strong> Customer is marked ON_HOLD in ERP Debtors Ledger. Commercial approval required before order release.
+                  </div>
+                ` : ''}
                 <div style="font-size: 10.5px; color: var(--slate-500); margin-top: 3px;">
-                  ℹ️ Linked to ERP Debtors Ledger. Note: Selecting an account verifies approved credit terms.
+                  ℹ️ Linked to Mock ERP Debtors Ledger. Selecting an account verifies approved credit terms and TRN.
                 </div>
               </div>
             ` : `
               <div class="form-group col-span-2">
-                <label class="form-label">Recipient / Company Name *</label>
+                <label class="form-label">Recipient / Company Name (General Ledger Ad-Hoc) *</label>
                 <input type="text" class="form-input" id="companyNameInput" value="${escapeHtml(currentQuote.companyName)}" oninput="currentQuote.companyName = this.value" placeholder="Enter recipient organization">
                 <div style="font-size: 10.5px; color: var(--slate-500); margin-top: 3px;">
-                  ℹ️ General Ledger routing: Quoting directly to recipient. Does not create a new ERP customer record.
+                  ℹ️ General Ledger routing: Quoting directly to recipient. Does not search or create an ERP customer record.
                 </div>
               </div>
             `}
@@ -781,6 +803,7 @@ function renderTableRows() {
           ${isCostUnknown 
             ? '<span class="text-warning" title="Cost pending ERP master link">Unknown</span>' 
             : `AED ${Number(item.cost).toFixed(2)}`}
+          ${item.costMetadata ? `<div class="provisional-cost-pill" title="Valuation basis is provisional demo data.">${item.costMetadata.costType === 'WEIGHTED_AVERAGE_COST' ? 'WAC (Demo)' : (item.costMetadata.costType || 'Provisional')}</div>` : ''}
         </td>
         <td style="text-align: right; font-family: var(--font-mono); font-weight: 600;">
           AED ${formatMoney(lineTotal)}
@@ -914,33 +937,220 @@ function addUnmatchedItem() {
 
 function setCustomerRoute(route) {
   currentQuote.customerRoute = route;
+  if (route === "G") {
+    currentQuote.customerAccount = null;
+    currentQuote.customerCreditStatus = null;
+  } else if (!currentQuote.customerAccount) {
+    currentQuote.customerAccount = "Al-Futtaim Engineering Ltd [ACC-88219]";
+    currentQuote.customerCreditStatus = "APPROVED";
+  }
   renderWorkspace(document.getElementById("mainContent"));
+  saveDraft();
 }
 
 function handleAccountChange(accountName) {
   currentQuote.customerAccount = accountName;
-  if (accountName.includes("Al-Futtaim")) {
-    currentQuote.companyName = "Al-Futtaim Engineering Ltd";
+  if (accountName.includes("ACC-88219") || accountName.includes("Al-Futtaim")) {
+    currentQuote.companyName = "Al-Futtaim Engineering & Technologies LLC";
     currentQuote.contactPerson = "Mr. Zaid Mansoor";
     currentQuote.email = "z.mansoor@alfuttaim.ae";
     currentQuote.phone = "+971 4 213 4400";
-  } else if (accountName.includes("Khansaheb")) {
+    currentQuote.customerCreditStatus = "APPROVED";
+    currentQuote.trn = "100293847200003";
+  } else if (accountName.includes("ACC-44102") || accountName.includes("Khansaheb")) {
     currentQuote.companyName = "Khansaheb Civil Engineering LLC";
     currentQuote.contactPerson = "Eng. Tariq Khansaheb";
     currentQuote.email = "tariq@khansaheb.ae";
     currentQuote.phone = "+971 4 333 1200";
-  } else if (accountName.includes("Sobha")) {
+    currentQuote.customerCreditStatus = "APPROVED";
+    currentQuote.trn = "100348291000003";
+  } else if (accountName.includes("ACC-90112") || accountName.includes("Sobha")) {
     currentQuote.companyName = "Sobha Realty LLC";
     currentQuote.contactPerson = "Mr. Rajiv Menon";
     currentQuote.email = "rajiv@sobharealty.com";
     currentQuote.phone = "+971 4 423 8900";
-  } else if (accountName.includes("Dutco")) {
+    currentQuote.customerCreditStatus = "APPROVED";
+    currentQuote.trn = "100492817300003";
+  } else if (accountName.includes("ACC-12093") || accountName.includes("Dutco")) {
     currentQuote.companyName = "Dutco Balfour Beatty LLC";
     currentQuote.contactPerson = "Mr. Kevin Clark";
     currentQuote.email = "k.clark@dutco.ae";
     currentQuote.phone = "+971 4 885 1100";
+    currentQuote.customerCreditStatus = "APPROVED";
+    currentQuote.trn = "100582910400003";
+  } else if (accountName.includes("ACC-HOLD-09") || accountName.includes("Stalled")) {
+    currentQuote.companyName = "Stalled Commercial Contractors LLC";
+    currentQuote.contactPerson = "Mr. Nabil Dawood";
+    currentQuote.email = "nabil@stalledcontractors.ae";
+    currentQuote.phone = "+971 4 991 2233";
+    currentQuote.customerCreditStatus = "CREDIT_HOLD";
+    currentQuote.trn = "100998877600003";
   }
   renderWorkspace(document.getElementById("mainContent"));
+  saveDraft();
+}
+
+// --------------------------------------------------------------------------
+// DEBTORS CUSTOMER SEARCH MODAL (MOCK ERP CONNECTOR)
+// --------------------------------------------------------------------------
+function openCustomerSearchModal() {
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay";
+  overlay.id = "customerModalOverlay";
+
+  overlay.innerHTML = `
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">ERP Debtors Ledger Customer Search</div>
+          <div style="font-size: 11px; color: var(--slate-500); margin-top: 2px;">
+            Search verified Debtors accounts in the on-premise ERP. (Connected via Mock Adapter)
+          </div>
+        </div>
+        <button class="icon-btn" onclick="closeCustomerModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+          <input type="text" class="form-input" id="debtorsSearchInput"
+                 placeholder="Search by Account Code, Legal Name, or TRN (e.g. Al-Futtaim, ACC-44102, 10029)..."
+                 oninput="filterDebtorsCustomers(this.value)">
+          <button class="btn btn-primary" onclick="filterDebtorsCustomers(document.getElementById('debtorsSearchInput').value)">
+            Search
+          </button>
+        </div>
+
+        <div id="debtorsStatusContainer"></div>
+
+        <div class="table-container" style="max-height: 320px;">
+          <table class="quote-table">
+            <thead>
+              <tr>
+                <th style="width: 110px;">Account Code</th>
+                <th>Legal Name / Trade Name</th>
+                <th style="width: 140px;">TRN</th>
+                <th style="width: 90px;">Credit Status</th>
+                <th style="width: 90px; text-align: center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="debtorsTableBody">
+              <tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--slate-500);">Type at least 2 characters to search Debtors accounts...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div style="flex: 1; font-size: 11px; color: var(--slate-500);">
+          Data Source: <strong>Mock Demo Data (Unverified)</strong> • Selecting binds verified account to draft.
+        </div>
+        <button class="btn btn-secondary" onclick="closeCustomerModal()">Cancel</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  overlay.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeCustomerModal();
+  });
+
+  filterDebtorsCustomers("ACC");
+}
+
+function closeCustomerModal() {
+  const modal = document.getElementById("customerModalOverlay");
+  if (modal) modal.remove();
+}
+
+async function filterDebtorsCustomers(query) {
+  const q = (query || "").trim();
+  const statusContainer = document.getElementById("debtorsStatusContainer");
+  const tbody = document.getElementById("debtorsTableBody");
+  if (!statusContainer || !tbody) return;
+
+  if (q.length < 2) {
+    statusContainer.innerHTML = "";
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--slate-500);">Type at least 2 characters to search Debtors accounts...</td></tr>`;
+    return;
+  }
+
+  const currentSeq = ++customerSearchSeq;
+  statusContainer.innerHTML = `<div style="padding: 8px 0; color: var(--slate-500); font-size: 11.5px;"><span class="spinner"></span> Querying Mock ERP Debtors Ledger...</div>`;
+
+  if (!erpConnector) {
+    statusContainer.innerHTML = `<div class="error-banner-box">ERP Connector is not loaded.</div>`;
+    return;
+  }
+
+  const res = await erpConnector.searchDebtorsCustomers({ search: q, limit: 15 });
+  if (currentSeq !== customerSearchSeq) return; // Prevent stale responses
+
+  if (!res.success) {
+    statusContainer.innerHTML = `
+      <div class="error-banner-box">
+        <strong>${escapeHtml(res.error.code)}:</strong> ${escapeHtml(res.error.detail)}
+        <div style="font-size: 10.5px; margin-top: 3px;">${escapeHtml(res.error.user_action || '')}</div>
+      </div>
+    `;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--slate-500);">No matching Debtors accounts.</td></tr>`;
+    return;
+  }
+
+  statusContainer.innerHTML = "";
+  const items = res.data.items || [];
+  if (items.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--slate-500);">No accounts found matching "${escapeHtml(q)}".</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = items.map(c => `
+    <tr>
+      <td><span class="erp-code-tag">${escapeHtml(c.account_id)}</span></td>
+      <td>
+        <strong>${escapeHtml(c.legal_name)}</strong>
+        <div style="font-size: 10.5px; color: var(--slate-500);">${escapeHtml(c.trade_name || '')}</div>
+      </td>
+      <td class="font-mono" style="font-size: 11px;">${escapeHtml(c.tax_registration_number || 'N/A')}</td>
+      <td>
+        <span class="badge ${c.credit_status === 'APPROVED' ? 'badge-confirmed' : 'badge-danger'}">
+          ${escapeHtml(c.credit_status || 'UNKNOWN')}
+        </span>
+      </td>
+      <td style="text-align: center;">
+        <button class="btn btn-primary btn-sm" onclick="selectCustomerFromSearch('${escapeHtml(c.account_id)}')">
+          + Select
+        </button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+async function selectCustomerFromSearch(accountId) {
+  if (!erpConnector) return;
+  const res = await erpConnector.searchDebtorsCustomers({ search: accountId, limit: 1 });
+  if (!res.success || !res.data.items.length) {
+    showToast("Could not retrieve customer details from connector.");
+    return;
+  }
+
+  const c = res.data.items[0];
+  currentQuote.customerAccount = `${c.legal_name} [${c.account_id}]`;
+  currentQuote.companyName = c.legal_name;
+  currentQuote.contactPerson = c.contact_person || currentQuote.contactPerson || "Commercial Contact";
+  currentQuote.email = c.email || currentQuote.email || "";
+  currentQuote.phone = c.phone || currentQuote.phone || "";
+  currentQuote.customerCreditStatus = c.credit_status;
+  currentQuote.trn = c.tax_registration_number;
+
+  closeCustomerModal();
+  renderWorkspace(document.getElementById("mainContent"));
+  saveDraft();
+
+  if (c.credit_status === "CREDIT_HOLD" || c.status === "ON_HOLD") {
+    showToast("⚠️ Notice: Customer is on CREDIT HOLD. Commercial approval required.");
+  } else {
+    showToast(`Debtors customer linked: ${c.account_id}`);
+  }
 }
 
 // --------------------------------------------------------------------------
@@ -988,7 +1198,7 @@ function markAIMatchUnmatched() {
 }
 
 // --------------------------------------------------------------------------
-// SCREEN 4: PRODUCT CATALOG SEARCH MODAL
+// SCREEN 4: PRODUCT CATALOG SEARCH MODAL (MOCK ERP CONNECTOR)
 // --------------------------------------------------------------------------
 let targetLineForCatalog = null;
 
@@ -1002,7 +1212,7 @@ function openCatalogModalForLine(lineId) {
   showCatalogModal("");
 }
 
-function showCatalogModal(initialQuery) {
+function showCatalogModal(initialQuery = "") {
   const overlay = document.createElement("div");
   overlay.className = "modal-overlay";
   overlay.id = "catalogModalOverlay";
@@ -1011,33 +1221,41 @@ function showCatalogModal(initialQuery) {
     <div class="modal-dialog">
       <div class="modal-header">
         <div>
-          <div class="modal-title">ERP Product Catalogue Search</div>
+          <div class="modal-title">ERP Product Catalogue Search (Mock Connector)</div>
           <div style="font-size: 11px; color: var(--slate-500); margin-top: 2px;">
-            Search live MIM ERP product master. Note: Selecting links catalog data to quotation without editing master records.
+            Connected to MIM Windows ERP Read-Only Mock Adapter. Selecting links verified SKU and baseline cost to draft.
           </div>
         </div>
         <button class="icon-btn" onclick="closeCatalogModal()">✕</button>
       </div>
 
       <div class="modal-body">
-        <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
           <div style="flex: 1; position: relative;">
             <input type="text" class="form-input" id="catalogSearchQuery" 
-                   value="${initialQuery}" placeholder="Search by SKU, Description, Variant (e.g. MIM-SS, Dispenser, 304, Nozzle)..." 
-                   oninput="filterCatalogResults(this.value)">
+                   value="${escapeHtml(initialQuery)}" placeholder="Search by SKU, Description, Variant (e.g. MIM-SS, Dispenser, 304, Nozzle, CBL)..." 
+                   oninput="filterCatalogResults()">
           </div>
           <select class="form-select" style="width: 160px;" id="catalogCategorySelect" onchange="filterCatalogResults()">
             <option value="All">All Categories</option>
             <option value="Dispensers">Dispensers</option>
             <option value="Hardware">Hardware</option>
             <option value="Spares">Spares</option>
+            <option value="Cables">Cables</option>
+            <option value="Conduits">Conduits</option>
           </select>
+          <button class="btn btn-secondary" onclick="filterCatalogResults()">Search</button>
         </div>
 
-        <div style="display: flex; gap: 8px; margin-bottom: 12px; font-size: 11.5px;">
-          <span class="badge badge-info" id="matchCountBadge">6 Items Available</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 11.5px;">
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="badge badge-info" id="matchCountBadge">Searching...</span>
+            <span class="badge-mock">Mock Demo Data</span>
+          </div>
           <span style="color: var(--slate-500);">Warehouse: Jebel Ali Free Zone (Active)</span>
         </div>
+
+        <div id="catalogStatusContainer"></div>
 
         <div class="table-container" style="max-height: 380px;">
           <table class="quote-table">
@@ -1048,13 +1266,13 @@ function showCatalogModal(initialQuery) {
                 <th>Description</th>
                 <th>Variant / Spec</th>
                 <th style="width: 60px;">Unit</th>
-                <th style="width: 90px; text-align: right;">Cost (AED)</th>
+                <th style="width: 100px; text-align: right;">List Price</th>
                 <th style="width: 130px;">Stock</th>
                 <th style="width: 100px; text-align: center;">Action</th>
               </tr>
             </thead>
             <tbody id="catalogTableBody">
-              ${renderCatalogRows(ERP_CATALOG)}
+              <tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--slate-500);"><span class="spinner"></span> Loading ERP Product Master...</td></tr>
             </tbody>
           </table>
         </div>
@@ -1062,7 +1280,7 @@ function showCatalogModal(initialQuery) {
 
       <div class="modal-footer">
         <div style="flex: 1; font-size: 11px; color: var(--slate-500);">
-          Press <kbd>ESC</kbd> to exit. Selecting a product populates description, ERP code, and cost baseline.
+          Press <kbd>ESC</kbd> to exit. Explicit employee confirmation required before quotation assembly.
         </div>
         <button class="btn btn-secondary" onclick="closeCatalogModal()">Cancel</button>
       </div>
@@ -1074,6 +1292,57 @@ function showCatalogModal(initialQuery) {
   overlay.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeCatalogModal();
   });
+
+  filterCatalogResults();
+}
+
+async function filterCatalogResults() {
+  const query = (document.getElementById("catalogSearchQuery")?.value || "").trim();
+  const category = document.getElementById("catalogCategorySelect")?.value || "All";
+  const statusContainer = document.getElementById("catalogStatusContainer");
+  const tbody = document.getElementById("catalogTableBody");
+  const countBadge = document.getElementById("matchCountBadge");
+
+  if (!tbody) return;
+
+  const currentSeq = ++productSearchSeq;
+  if (statusContainer) {
+    statusContainer.innerHTML = `<div style="padding: 6px 0; color: var(--slate-500); font-size: 11px;"><span class="spinner"></span> Querying Mock ERP Catalog...</div>`;
+  }
+
+  if (!erpConnector) {
+    if (statusContainer) statusContainer.innerHTML = `<div class="error-banner-box">ERP Connector abstraction unavailable.</div>`;
+    return;
+  }
+
+  const res = await erpConnector.searchProducts({
+    query: query || undefined,
+    category: category !== "All" ? category : undefined,
+    limit: 30
+  });
+
+  if (currentSeq !== productSearchSeq) return; // Prevent race conditions
+
+  if (!res.success) {
+    if (statusContainer) {
+      statusContainer.innerHTML = `
+        <div class="error-banner-box">
+          <strong>${escapeHtml(res.error.code)}:</strong> ${escapeHtml(res.error.detail)}
+          <div style="font-size: 10.5px; margin-top: 3px;">${escapeHtml(res.error.user_action || '')}</div>
+          <button class="btn btn-secondary btn-sm" style="margin-top: 6px;" onclick="filterCatalogResults()">Retry Search</button>
+        </div>
+      `;
+    }
+    if (countBadge) countBadge.textContent = "0 Items Found";
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--slate-500);">No items available for this search.</td></tr>`;
+    return;
+  }
+
+  if (statusContainer) statusContainer.innerHTML = "";
+  const items = res.data.items || [];
+  if (countBadge) countBadge.textContent = `${items.length} Items Found (Mock)`;
+
+  tbody.innerHTML = renderCatalogRows(items);
 }
 
 function renderCatalogRows(items) {
@@ -1081,61 +1350,72 @@ function renderCatalogRows(items) {
     return `<tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--slate-500);">No catalog items match your search.</td></tr>`;
   }
 
-  return items.map(p => `
-    <tr>
-      <td>
-        <span class="badge ${p.matchType === 'exact' ? 'badge-confirmed' : 'badge-draft'}">
-          ${p.matchType === 'exact' ? 'EXACT CODE' : 'SIMILAR'}
-        </span>
-      </td>
-      <td><span class="erp-code-tag">${p.code}</span></td>
-      <td><strong>${escapeHtml(p.description)}</strong></td>
-      <td style="color: var(--slate-600);">${escapeHtml(p.variant)}</td>
-      <td>${p.unit}</td>
-      <td style="text-align: right; font-family: var(--font-mono);">${p.cost.toFixed(2)}</td>
-      <td style="font-size: 11px; color: var(--success);">${p.stock}</td>
-      <td style="text-align: center;">
-        <button class="btn btn-primary btn-sm" onclick="selectProductFromCatalog('${p.code}')">
-          + Select
-        </button>
-      </td>
-    </tr>
-  `).join("");
+  return items.map(p => {
+    const listPrice = (p.pricing_summary && p.pricing_summary.list_price) ? p.pricing_summary.list_price : 0;
+    const stockInfo = (p.inventory_status && p.inventory_status.stock_text) ? p.inventory_status.stock_text : (p.inventory_status?.is_stocked ? 'In Stock' : 'Order to Order');
+    const variantText = p.variant || (p.specifications?.standard ? `Std: ${p.specifications.standard}` : 'Standard Specification');
+
+    return `
+      <tr>
+        <td>
+          <span class="badge ${p.match_type === 'EXACT_CODE' ? 'badge-confirmed' : 'badge-draft'}">
+            ${p.match_type === 'EXACT_CODE' ? 'EXACT CODE' : 'SIMILAR'}
+          </span>
+        </td>
+        <td><span class="erp-code-tag">${escapeHtml(p.product_code)}</span></td>
+        <td>
+          <strong>${escapeHtml(p.description)}</strong>
+          <div style="font-size: 10px; color: var(--slate-500);"><span class="badge-mock">Mock Demo SKU</span></div>
+        </td>
+        <td style="color: var(--slate-600);">${escapeHtml(variantText)}</td>
+        <td>${escapeHtml(p.unit_of_measure || 'PCS')}</td>
+        <td style="text-align: right; font-family: var(--font-mono);">
+          AED ${listPrice.toFixed(2)}
+          <div class="provisional-cost-pill">Baseline Price</div>
+        </td>
+        <td style="font-size: 11px; color: var(--success);">${escapeHtml(stockInfo)}</td>
+        <td style="text-align: center;">
+          <button class="btn btn-primary btn-sm" onclick="selectProductFromCatalog('${escapeHtml(p.product_code)}')">
+            + Select
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
 }
 
-function filterCatalogResults() {
-  const query = (document.getElementById("catalogSearchQuery")?.value || "").toLowerCase().trim();
-  const category = document.getElementById("catalogCategorySelect")?.value || "All";
+async function selectProductFromCatalog(code) {
+  if (!erpConnector) return;
 
-  const filtered = ERP_CATALOG.filter(p => {
-    const matchesQuery = !query || 
-      p.code.toLowerCase().includes(query) || 
-      p.description.toLowerCase().includes(query) || 
-      p.variant.toLowerCase().includes(query);
-    const matchesCategory = (category === "All") || (p.category === category);
-    return matchesQuery && matchesCategory;
-  });
+  // Retrieve authoritative pricing and cost through connector
+  const pricingRes = await erpConnector.lookupPricingAndCost({ product_code: code });
+  const productRes = await erpConnector.searchProducts({ code: code });
 
-  const tbody = document.getElementById("catalogTableBody");
-  if (tbody) tbody.innerHTML = renderCatalogRows(filtered);
+  const product = (productRes.success && productRes.data.items.length) ? productRes.data.items[0] : null;
+  const pricingData = pricingRes.success ? pricingRes.data : null;
 
-  const countBadge = document.getElementById("matchCountBadge");
-  if (countBadge) countBadge.textContent = `${filtered.length} Items Found`;
-}
-
-function selectProductFromCatalog(code) {
-  const product = ERP_CATALOG.find(p => p.code === code);
-  if (!product) return;
+  const description = product ? product.description : "Catalog Product";
+  const variant = product ? (product.variant || (product.specifications?.standard || "Standard")) : "";
+  const unit = product ? product.unit_of_measure : "PCS";
+  const listPrice = (pricingData && pricingData.pricing) ? pricingData.pricing.standard_list_price : 100.00;
+  const recordedCost = (pricingData && pricingData.costing) ? pricingData.costing.recorded_cost : null;
+  const costMetadata = (pricingData && pricingData.costing) ? {
+    costType: pricingData.costing.cost_type,
+    isProvisional: true,
+    timestamp: pricingData.costing.cost_timestamp,
+    status: pricingData.costing.cost_approval_status
+  } : null;
 
   if (targetLineForCatalog) {
     const line = currentQuote.lineItems.find(l => l.id === targetLineForCatalog);
     if (line) {
-      line.erpCode = product.code;
-      line.description = product.description;
-      line.variant = product.variant;
-      line.unit = product.unit;
-      line.cost = product.cost;
-      line.sellingPrice = product.listPrice;
+      line.erpCode = code;
+      line.description = description;
+      line.variant = variant;
+      line.unit = unit;
+      line.cost = recordedCost;
+      line.costMetadata = costMetadata;
+      line.sellingPrice = listPrice;
       line.status = "Confirmed";
     }
   } else {
@@ -1143,13 +1423,14 @@ function selectProductFromCatalog(code) {
     currentQuote.lineItems.push({
       id: "line-" + Date.now(),
       lineNo: nextNo,
-      description: product.description,
-      erpCode: product.code,
-      variant: product.variant,
+      description: description,
+      erpCode: code,
+      variant: variant,
       qty: 1,
-      unit: product.unit,
-      sellingPrice: product.listPrice,
-      cost: product.cost,
+      unit: unit,
+      sellingPrice: listPrice,
+      cost: recordedCost,
+      costMetadata: costMetadata,
       status: "Confirmed",
       notes: ""
     });
@@ -1157,7 +1438,13 @@ function selectProductFromCatalog(code) {
 
   closeCatalogModal();
   renderWorkspace(document.getElementById("mainContent"));
-  showToast(`Product linked: ${product.code}`);
+  saveDraft();
+
+  if (recordedCost === null) {
+    showToast(`⚠️ Linked ${code}: Warning — Cost is unknown in ERP. Margin calculation pending.`);
+  } else {
+    showToast(`Product linked via ERP Mock Connector: ${code} (Provisional Valuation)`);
+  }
 }
 
 function closeCatalogModal() {
@@ -1904,4 +2191,17 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    calculateTotals,
+    updateRowField,
+    setCustomerRoute,
+    handleAccountChange,
+    selectCustomerFromSearch,
+    selectProductFromCatalog,
+    ERP_CATALOG,
+    INITIAL_DRAFTS
+  };
 }

@@ -127,6 +127,22 @@ node tests/workflow_integration_test.js
 
 # 3. ERP Read-Only Connector Contract Tests (13/13 passed)
 node tests/erp_connector_contract_test.js
+
+# 4. Mock-Connected Workspace Integration Tests (12/12 passed)
+node tests/workspace_mock_integration_test.js
 ```
+
+---
+
+## 8. Phase 3.5: Mock-Connected Workspace Integration
+
+In Phase 3.5, the interactive quotation workspace UI was integrated end-to-end with the verified mock ERP connector:
+- **Product Search:** Live querying via `erpConnector.searchProducts()` with loading, empty, and RFC 7807 error states.
+- **Customer Lookup:** Debtors Ledger search via `erpConnector.searchDebtorsCustomers()` with automatic credit-hold detection (`ACC-HOLD-09`).
+- **General Ledger Isolation:** `[G]` recipient entry remains document-local with zero calls to the customer master.
+- **Pricing & Cost Lookup:** Authoritative pricing retrieved via `erpConnector.lookupPricingAndCost()` with provisional WAC metadata and missing-cost handling.
+- **Race Condition Protection:** Asynchronous sequence ID tracking prevents slower older queries from overwriting newer selections.
+- **Strict Mock Boundary:** UI explicitly displays `Mock Demo Data` with zero claims of live ERP connectivity or record creation.
+
 
 
