@@ -144,5 +144,43 @@ In Phase 3.5, the interactive quotation workspace UI was integrated end-to-end w
 - **Race Condition Protection:** Asynchronous sequence ID tracking prevents slower older queries from overwriting newer selections.
 - **Strict Mock Boundary:** UI explicitly displays `Mock Demo Data` with zero claims of live ERP connectivity or record creation.
 
+---
+
+## 9. Phase 4: Business Rules & Workflow Hardening
+
+Phase 4 evolves the workspace from a mock-connected visual prototype into a rule-governed quotation management system with explicit lifecycle controls, commercial approvals, audit trails, and customer-facing document formatting.
+
+- **Phase 4 Specification & Architecture Report:** [`docs/phase-4/BUSINESS_RULES_AND_WORKFLOW.md`](file:///docs/phase-4/BUSINESS_RULES_AND_WORKFLOW.md)
+- **Centralized Pricing Policy Engine:** [`src/rules/pricingPolicy.js`](file:///src/rules/pricingPolicy.js)
+- **Quotation Lifecycle & Workflow Rules:** [`src/rules/workflowLifecycle.js`](file:///src/rules/workflowLifecycle.js)
+- **Phase 4 Automated Test Suite:** [`tests/phase4_business_rules_test.js`](file:///tests/phase4_business_rules_test.js)
+
+### Key Capabilities Introduced in Phase 4:
+1. **Explicit Quotation Lifecycle:** Centralized 6-state machine (`DRAFT`, `IN_REVIEW`, `CHANGES_REQUESTED`, `APPROVED`, `READY_FOR_ERP`, `ERP_CONFIRMED`). UI actions cannot jump states without passing pre-condition validation.
+2. **Strict Mock Security Boundary:** The `ERP_CONFIRMED` state is strictly unreachable in mock mode (`ERR_ERP_CONFIRMATION_NOT_PERMITTED_IN_MOCK`), eliminating false claims of ERP synchronization.
+3. **Centralized Pricing Policy:** All commercial parameters (provisional 5% UAE VAT, provisional WAC costing, 15% discount limit, 15% minimum margin, AED currency, 2 decimal places) are managed centrally.
+4. **Commercial Approval Framework:** Automatically flags discount threshold violations, low margins, and below-cost sales for review by authorized demo manager personas (`DEMO_COMMERCIAL_MANAGER`, `DEMO_FINANCE_MANAGER`). Supports `Approve`, `Reject`, and `Request Changes` workflows.
+5. **Append-Only Audit Trail:** In-memory, session-persistent chronological ledger recording every lifecycle mutation, pricing override, customer route modification, and approval decision.
+6. **Customer-Facing Quotation Document:** Professional A4 printable quotation featuring company letterhead, draft watermark, itemized line discounts, provisional VAT notices, and commercial validity terms.
+
+### Running All Automated Test Suites (All 5 Pass 100%):
+```bash
+# 1. Calculation & Financial Logic Tests (8/8 passed)
+node tests/audit_calculations_test.js
+
+# 2. Workflow & Multi-Draft State Tests (5/5 passed)
+node tests/workflow_integration_test.js
+
+# 3. ERP Read-Only Connector Contract Tests (13/13 passed)
+node tests/erp_connector_contract_test.js
+
+# 4. Mock-Connected Workspace Integration Tests (12/12 passed)
+node tests/workspace_mock_integration_test.js
+
+# 5. Phase 4 Business Rules & Workflow Tests (88 assertions passed)
+node tests/phase4_business_rules_test.js
+```
+
+
 
 

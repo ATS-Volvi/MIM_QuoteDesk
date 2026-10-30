@@ -8,6 +8,7 @@ const INITIAL_DRAFTS = {
   "DRAFT-2026-0042": {
     id: "DRAFT-2026-0042",
     status: "Draft",
+    lifecycleState: "DRAFT",
     createdBy: "Alex Morgan (Sales Engineer)",
     lastSaved: "Just now",
     customerRoute: "D", // D: Debtors Ledger, G: General Ledger
@@ -22,6 +23,22 @@ const INITIAL_DRAFTS = {
     deliveryNotes: "Ex-works Jebel Ali Warehouse / Delivered to site within Dubai emirate",
     internalRemarks: "Customer has volume discount tier 2 applied. Need to check stock level for SS-DISP-WM01 with procurement.",
     customerRemarks: "Prices valid for 30 calendar days. Includes 12-month manufacturer replacement warranty against defects.",
+    headerDiscountPercent: 0,
+    approvals: [],
+    auditTrail: [
+      {
+        eventId: "AUD-INIT-0042",
+        quotationId: "DRAFT-2026-0042",
+        eventType: "QUOTATION_CREATED",
+        timestamp: "2026-10-30T08:00:00.000Z",
+        actor: "Alex Morgan (Sales Engineer)",
+        actorRole: "Sales Estimator",
+        previousValue: null,
+        newValue: "DRAFT-2026-0042",
+        reason: "Initial quotation drafted from customer enquiry",
+        isLocalDraftLog: true
+      }
+    ],
     lineItems: [
       {
         id: "line-1",
@@ -32,6 +49,7 @@ const INITIAL_DRAFTS = {
         qty: 25,
         unit: "PCS",
         sellingPrice: 185.00,
+        discountPercent: 0,
         cost: 115.00,
         status: "Confirmed",
         notes: ""
@@ -45,6 +63,7 @@ const INITIAL_DRAFTS = {
         qty: 25,
         unit: "SET",
         sellingPrice: 35.00,
+        discountPercent: 0,
         cost: 18.00,
         status: "Confirmed",
         notes: ""
@@ -58,6 +77,7 @@ const INITIAL_DRAFTS = {
         qty: 5,
         unit: "PCS",
         sellingPrice: 15.00,
+        discountPercent: 0,
         cost: null, // Unknown cost
         status: "Awaiting",
         notes: "Cost pending catalog match"
@@ -71,6 +91,7 @@ const INITIAL_DRAFTS = {
         qty: 10,
         unit: "PCS",
         sellingPrice: 17.00,
+        discountPercent: 0,
         cost: 9.50,
         status: "PriceWarning",
         historicalPrice: 16.00,
@@ -81,6 +102,7 @@ const INITIAL_DRAFTS = {
   "DRAFT-2026-0039": {
     id: "DRAFT-2026-0039",
     status: "Draft",
+    lifecycleState: "DRAFT",
     createdBy: "Sarah Chen (Senior Estimator)",
     lastSaved: "45 mins ago",
     customerRoute: "D",
@@ -95,6 +117,22 @@ const INITIAL_DRAFTS = {
     deliveryNotes: "Site delivery: Dubai Creek Harbour Sector 4",
     internalRemarks: "Requires special shipping arrangement from Europe warehouse.",
     customerRemarks: "Prices valid for 15 days.",
+    headerDiscountPercent: 0,
+    approvals: [],
+    auditTrail: [
+      {
+        eventId: "AUD-INIT-0039",
+        quotationId: "DRAFT-2026-0039",
+        eventType: "QUOTATION_CREATED",
+        timestamp: "2026-10-30T07:15:00.000Z",
+        actor: "Sarah Chen (Senior Estimator)",
+        actorRole: "Sales Estimator",
+        previousValue: null,
+        newValue: "DRAFT-2026-0039",
+        reason: "Initial quotation drafted from Dubai Creek Harbour enquiry",
+        isLocalDraftLog: true
+      }
+    ],
     lineItems: [
       {
         id: "line-39-1",
@@ -105,6 +143,7 @@ const INITIAL_DRAFTS = {
         qty: 120,
         unit: "PCS",
         sellingPrice: 320.00,
+        discountPercent: 0,
         cost: 295.00,
         status: "Confirmed",
         notes: ""
@@ -118,6 +157,7 @@ const INITIAL_DRAFTS = {
         qty: 120,
         unit: "SET",
         sellingPrice: 45.00,
+        discountPercent: 0,
         cost: null, // Unknown cost - Blocker!
         status: "Awaiting",
         notes: "Blocker: Cost unavailable"
@@ -127,6 +167,7 @@ const INITIAL_DRAFTS = {
   "DRAFT-2026-0035": {
     id: "DRAFT-2026-0035",
     status: "Ready for Review",
+    lifecycleState: "IN_REVIEW",
     createdBy: "Tariq Al-Hashimi (Sales Engineer)",
     lastSaved: "Yesterday 16:30",
     customerRoute: "G", // General Ledger
@@ -141,6 +182,34 @@ const INITIAL_DRAFTS = {
     deliveryNotes: "Ex-works Dubai warehouse",
     internalRemarks: "All products verified in Jebel Ali stock.",
     customerRemarks: "Prices valid for 30 calendar days.",
+    headerDiscountPercent: 5,
+    approvals: [],
+    auditTrail: [
+      {
+        eventId: "AUD-INIT-0035",
+        quotationId: "DRAFT-2026-0035",
+        eventType: "QUOTATION_CREATED",
+        timestamp: "2026-10-29T16:30:00.000Z",
+        actor: "Tariq Al-Hashimi (Sales Engineer)",
+        actorRole: "Sales Estimator",
+        previousValue: null,
+        newValue: "DRAFT-2026-0035",
+        reason: "Initial quotation drafted for Sobha Hartland show villa",
+        isLocalDraftLog: true
+      },
+      {
+        eventId: "AUD-REV-0035",
+        quotationId: "DRAFT-2026-0035",
+        eventType: "STATUS_CHANGED",
+        timestamp: "2026-10-29T16:45:00.000Z",
+        actor: "Tariq Al-Hashimi (Sales Engineer)",
+        actorRole: "Sales Estimator",
+        previousValue: "DRAFT",
+        newValue: "IN_REVIEW",
+        reason: "Submitted for commercial review and approval",
+        isLocalDraftLog: true
+      }
+    ],
     lineItems: [
       {
         id: "line-35-1",
@@ -151,6 +220,7 @@ const INITIAL_DRAFTS = {
         qty: 20,
         unit: "SET",
         sellingPrice: 35.00,
+        discountPercent: 0,
         cost: 18.00,
         status: "Confirmed",
         notes: ""
@@ -164,6 +234,7 @@ const INITIAL_DRAFTS = {
         qty: 20,
         unit: "PCS",
         sellingPrice: 17.00,
+        discountPercent: 0,
         cost: 9.50,
         status: "Confirmed",
         notes: ""
@@ -248,6 +319,21 @@ const ERP_CATALOG = [
 const erpConnector = (typeof MIM_ERP !== "undefined" && MIM_ERP.createErpConnector)
   ? MIM_ERP.createErpConnector({ simulatedLatencyMs: 60 })
   : (typeof require !== "undefined" ? require("./src/connector/erpConnector").createErpConnector({ simulatedLatencyMs: 60 }) : null);
+
+// --------------------------------------------------------------------------
+// Phase 4 Business Rules & Workflow Lifecycle Engines
+// --------------------------------------------------------------------------
+const pricingPolicyModule = (typeof MIM_PricingPolicy !== "undefined")
+  ? MIM_PricingPolicy
+  : (typeof require !== "undefined" ? require("./src/rules/pricingPolicy") : null);
+
+const workflowLifecycleModule = (typeof MIM_WorkflowLifecycle !== "undefined")
+  ? MIM_WorkflowLifecycle
+  : (typeof require !== "undefined" ? require("./src/rules/workflowLifecycle") : null);
+
+const defaultPricingEngine = (pricingPolicyModule && pricingPolicyModule.defaultPricingEngine)
+  ? pricingPolicyModule.defaultPricingEngine
+  : (pricingPolicyModule ? new pricingPolicyModule.PricingEngine() : null);
 
 // Asynchronous Request Sequence Tracking (Prevents stale responses)
 let productSearchSeq = 0;
@@ -337,6 +423,15 @@ function renderScreen() {
 // --------------------------------------------------------------------------
 function renderWorkspace(container) {
   const totals = calculateTotals();
+  const lifecycle = currentQuote.lifecycleState || "DRAFT";
+
+  let lifecycleBadgeClass = "badge-draft";
+  if (lifecycle === "IN_REVIEW") lifecycleBadgeClass = "badge-in-review";
+  else if (lifecycle === "CHANGES_REQUESTED") lifecycleBadgeClass = "badge-changes-requested";
+  else if (lifecycle === "APPROVED") lifecycleBadgeClass = "badge-approved";
+  else if (lifecycle === "READY_FOR_ERP") lifecycleBadgeClass = "badge-ready-for-erp";
+
+  const isAuditExpanded = window._mimAuditTrailExpanded !== false;
 
   container.innerHTML = `
     <!-- Top Quotation Bar -->
@@ -344,11 +439,11 @@ function renderWorkspace(container) {
       <div>
         <div class="workspace-title-group">
           <h1 class="workspace-title">Create Quotation</h1>
-          <span class="badge badge-draft">${currentQuote.status}</span>
+          <span class="badge ${lifecycleBadgeClass}">${lifecycle}</span>
           <span class="draft-ref">${currentQuote.id}</span>
         </div>
         <div class="meta-subtext">
-          Created by <strong>${currentQuote.createdBy}</strong> • Last saved: <span id="lastSavedText">${currentQuote.lastSaved}</span> • ERP Demo Mode
+          Created by <strong>${currentQuote.createdBy}</strong> • Last saved: <span id="lastSavedText">${currentQuote.lastSaved}</span> • ERP Demo Mode (Read-Only)
         </div>
       </div>
       <div class="top-bar-actions">
@@ -360,12 +455,114 @@ function renderWorkspace(container) {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
           Preview Quotation
         </button>
-        <button class="btn btn-teal" onclick="runValidationCheck(true)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          Validate Quotation
-        </button>
+        ${lifecycle === 'DRAFT' ? `
+          <button class="btn btn-teal" onclick="handleLifecycleTransition('IN_REVIEW')">
+            Submit for Review →
+          </button>
+          <button class="btn btn-primary" onclick="handleLifecycleTransition('APPROVED')">
+            Direct Approve
+          </button>
+        ` : ''}
+        ${lifecycle === 'IN_REVIEW' ? `
+          <button class="btn btn-primary" onclick="handleLifecycleTransition('APPROVED')">
+            ✓ Approve (Commercial Manager)
+          </button>
+          <button class="btn btn-secondary" onclick="handleLifecycleTransition('CHANGES_REQUESTED')">
+            Request Changes
+          </button>
+        ` : ''}
+        ${lifecycle === 'CHANGES_REQUESTED' ? `
+          <button class="btn btn-primary" onclick="handleLifecycleTransition('DRAFT')">
+            Revise Draft →
+          </button>
+        ` : ''}
+        ${lifecycle === 'APPROVED' ? `
+          <button class="btn btn-primary" onclick="handleLifecycleTransition('READY_FOR_ERP')">
+            Advance to Ready for ERP →
+          </button>
+          <button class="btn btn-secondary" onclick="handleLifecycleTransition('DRAFT')">
+            Reopen Draft
+          </button>
+        ` : ''}
+        ${lifecycle === 'READY_FOR_ERP' ? `
+          <button class="btn btn-primary" onclick="openErpConfirmModal()">
+            Pre-Flight ERP Staging Check →
+          </button>
+          <button class="btn btn-secondary" onclick="handleLifecycleTransition('DRAFT')">
+            Reopen Draft
+          </button>
+        ` : ''}
       </div>
     </div>
+
+    <!-- Lifecycle Stepper Bar -->
+    <div class="lifecycle-stepper-bar">
+      <div class="lifecycle-steps">
+        <div class="lifecycle-step-node ${lifecycle === 'DRAFT' ? 'active' : (lifecycle !== 'DRAFT' ? 'completed' : '')}">
+          <span class="lifecycle-step-dot">${lifecycle !== 'DRAFT' ? '✓' : '1'}</span>
+          <span>Draft</span>
+        </div>
+        <span class="lifecycle-step-arrow">→</span>
+        <div class="lifecycle-step-node ${lifecycle === 'IN_REVIEW' ? 'active' : (['APPROVED', 'READY_FOR_ERP'].includes(lifecycle) ? 'completed' : '')}">
+          <span class="lifecycle-step-dot">${['APPROVED', 'READY_FOR_ERP'].includes(lifecycle) ? '✓' : '2'}</span>
+          <span>In Review</span>
+        </div>
+        <span class="lifecycle-step-arrow">→</span>
+        ${lifecycle === 'CHANGES_REQUESTED' ? `
+          <div class="lifecycle-step-node active" style="color: #c2410c;">
+            <span class="lifecycle-step-dot" style="background-color: #ffedd5; border-color: #fdba74; color: #c2410c;">!</span>
+            <span>Changes Requested</span>
+          </div>
+          <span class="lifecycle-step-arrow">→</span>
+        ` : ''}
+        <div class="lifecycle-step-node ${lifecycle === 'APPROVED' ? 'active' : (lifecycle === 'READY_FOR_ERP' ? 'completed' : '')}">
+          <span class="lifecycle-step-dot">${lifecycle === 'READY_FOR_ERP' ? '✓' : '3'}</span>
+          <span>Approved</span>
+        </div>
+        <span class="lifecycle-step-arrow">→</span>
+        <div class="lifecycle-step-node ${lifecycle === 'READY_FOR_ERP' ? 'active completed' : ''}">
+          <span class="lifecycle-step-dot">${lifecycle === 'READY_FOR_ERP' ? '✓' : '4'}</span>
+          <span>Ready for ERP</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="badge ${lifecycleBadgeClass}">Lifecycle: ${lifecycle}</span>
+        ${totals.isMarginBelowThreshold ? '<span class="badge badge-warning">Low Margin Trigger</span>' : ''}
+      </div>
+    </div>
+
+    <!-- Commercial Approvals Panel -->
+    ${(currentQuote.approvals && currentQuote.approvals.length > 0) ? `
+      <div class="approval-panel">
+        <div class="approval-panel-header">
+          <div class="approval-panel-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Commercial Approval Policy Triggers (${currentQuote.approvals.length})
+          </div>
+          <span style="font-size: 11px; color: #6b21a8;">Demo Role: Estimating & Commercial Management</span>
+        </div>
+        ${currentQuote.approvals.map(appr => `
+          <div class="approval-item-card">
+            <div>
+              <div class="approval-item-reason">${escapeHtml(appr.reason)}</div>
+              <div class="approval-item-meta">
+                Trigger: <strong>${appr.triggerType}</strong> • Assigned: <strong>${appr.assignedApprover}</strong> • Status: <strong style="color: ${appr.decision === 'APPROVED' ? 'var(--success)' : (appr.decision === 'PENDING' ? 'var(--warning)' : 'var(--danger)')};">${appr.decision}</strong>
+                ${appr.approvalComments ? ` • Note: <em>"${escapeHtml(appr.approvalComments)}"</em>` : ''}
+              </div>
+            </div>
+            <div class="approval-actions-group">
+              ${appr.decision !== 'APPROVED' ? `
+                <button class="btn btn-sm btn-teal" onclick="handleApprovalDecision('${appr.approvalId}', 'APPROVED')">✓ Approve</button>
+                <button class="btn btn-sm btn-secondary" onclick="handleApprovalDecision('${appr.approvalId}', 'REQUEST_CHANGES')">Request Changes</button>
+                <button class="btn btn-sm btn-danger" onclick="handleApprovalDecision('${appr.approvalId}', 'REJECTED')">✕ Reject</button>
+              ` : `
+                <span class="badge badge-confirmed">Approved by ${escapeHtml(appr.decisionBy || 'Commercial Manager')}</span>
+              `}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
 
     <!-- Customer & AI Enquiry Grid -->
     <div class="grid-2col">
@@ -530,7 +727,7 @@ function renderWorkspace(container) {
           Quotation Line Items (${currentQuote.lineItems.length} lines)
         </div>
         <div style="font-size: 11px; color: var(--slate-500);">
-          All values in AED • UAE VAT at 5% applies
+          All values in AED • UAE VAT at 5% applies (Provisional Demo Value)
         </div>
       </div>
       <div class="card-body" style="padding: 0;">
@@ -538,17 +735,18 @@ function renderWorkspace(container) {
           <table class="quote-table">
             <thead>
               <tr>
-                <th style="width: 40px; text-align: center;">#</th>
-                <th style="min-width: 220px;">Product / Description</th>
-                <th style="width: 140px;">ERP Code</th>
-                <th style="width: 180px;">Variant / Spec</th>
-                <th style="width: 80px; text-align: right;">Qty</th>
-                <th style="width: 60px;">Unit</th>
-                <th style="width: 110px; text-align: right;">Selling Price</th>
-                <th style="width: 100px; text-align: right;">Cost</th>
-                <th style="width: 110px; text-align: right;">Line Total</th>
-                <th style="width: 140px;">Status</th>
-                <th style="width: 90px; text-align: center;">Actions</th>
+                <th style="width: 35px; text-align: center;">#</th>
+                <th style="min-width: 200px;">Product / Description</th>
+                <th style="width: 130px;">ERP Code</th>
+                <th style="width: 160px;">Variant / Spec</th>
+                <th style="width: 70px; text-align: right;">Qty</th>
+                <th style="width: 55px;">Unit</th>
+                <th style="width: 100px; text-align: right;">Selling Price</th>
+                <th style="width: 70px; text-align: right;">Disc %</th>
+                <th style="width: 95px; text-align: right;">Cost</th>
+                <th style="width: 105px; text-align: right;">Line Total</th>
+                <th style="width: 125px;">Status</th>
+                <th style="width: 60px; text-align: center;">Actions</th>
               </tr>
             </thead>
             <tbody id="lineItemsTableBody">
@@ -614,12 +812,29 @@ function renderWorkspace(container) {
         </div>
 
         <div class="summary-row">
-          <span class="text-muted">Subtotal (Excl. VAT)</span>
+          <span class="text-muted">Gross Subtotal (Excl. VAT)</span>
+          <span class="font-mono">AED ${formatMoney(totals.subtotalBeforeHeaderDiscount || totals.subtotal)}</span>
+        </div>
+
+        <div class="summary-row" style="align-items: center;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="text-muted">Header Discount (%):</span>
+            <input type="number" min="0" max="100" style="width: 46px; font-size: 11px; padding: 2px 4px; border: 1px solid var(--slate-300); border-radius: var(--radius-xs);" 
+                   value="${currentQuote.headerDiscountPercent || 0}" 
+                   onchange="updateHeaderDiscount(this.value)">
+          </div>
+          <span class="font-mono" style="color: var(--danger);">- AED ${formatMoney(totals.totalDiscountAmount || 0)}</span>
+        </div>
+
+        <div class="summary-row">
+          <span class="text-muted">Net Subtotal</span>
           <span class="font-mono" style="font-weight: 600;">AED ${formatMoney(totals.subtotal)}</span>
         </div>
 
         <div class="summary-row">
-          <span class="text-muted">VAT at 5%</span>
+          <span class="text-muted">
+            UAE VAT at 5% <span class="badge badge-provisional">Provisional</span>
+          </span>
           <span class="font-mono">AED ${formatMoney(totals.vat)}</span>
         </div>
 
@@ -629,8 +844,11 @@ function renderWorkspace(container) {
         </div>
 
         <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--slate-200);">
-          <div style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase; margin-bottom: 8px;">
-            Commercial Margin Analysis
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--slate-500); text-transform: uppercase;">
+              Commercial Margin Analysis
+            </span>
+            <span class="badge badge-provisional">WAC Demo</span>
           </div>
 
           <div class="summary-row">
@@ -652,13 +870,19 @@ function renderWorkspace(container) {
             <span>
               ${totals.hasUnknownCost 
                 ? '<span class="badge badge-warning">Unknown</span>' 
-                : `<span class="margin-chip">${totals.grossMargin.toFixed(1)}%</span>`}
+                : `<span class="margin-chip" style="${totals.isMarginBelowThreshold ? 'background-color: var(--danger-bg); color: var(--danger); border-color: var(--danger-border);' : ''}">${totals.grossMargin.toFixed(1)}%</span>`}
             </span>
           </div>
 
+          ${totals.isMarginBelowThreshold ? `
+            <div style="margin-top: 10px; padding: 6px 8px; background-color: var(--warning-bg); border: 1px solid var(--warning-border); border-radius: var(--radius-sm); font-size: 11px; color: var(--warning);">
+              ⚠️ <strong>Margin Policy Warning:</strong> Gross margin (${totals.grossMargin}%) is below 15.0% threshold. Managerial approval required.
+            </div>
+          ` : ''}
+
           ${totals.hasPriceBelowCost ? `
             <div style="margin-top: 10px; padding: 6px 8px; background-color: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: var(--radius-sm); font-size: 11px; color: var(--danger);">
-              ⚠️ <strong>Margin Violation:</strong> One or more items are priced below cost. Quotation finalisation is blocked.
+              ⚠️ <strong>Below-Cost Item:</strong> One or more items are priced below cost. Managerial review required.
             </div>
           ` : ''}
 
@@ -671,10 +895,27 @@ function renderWorkspace(container) {
       </div>
     </div>
 
+    <!-- Section: Structured Audit Trail Component -->
+    <div class="audit-trail-card">
+      <div class="audit-trail-header" onclick="toggleAuditTrail()">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span style="font-weight: 700; color: var(--navy-900);">Quotation Audit Trail (${currentQuote.auditTrail ? currentQuote.auditTrail.length : 0} Events)</span>
+          <span class="badge badge-provisional">Append-Only Local Session Log</span>
+        </div>
+        <span style="font-size: 11px; color: var(--slate-500);" id="auditToggleText">
+          ${isAuditExpanded ? 'Collapse ▲' : 'Expand ▼'}
+        </span>
+      </div>
+      <div class="audit-timeline-list" id="auditTimelineContainer" style="display: ${isAuditExpanded ? 'flex' : 'none'};">
+        ${renderAuditTrailEntries()}
+      </div>
+    </div>
+
     <!-- Section G: Validation Panel -->
     <div class="validation-strip">
       <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-weight: 700; font-size: 12px; color: var(--navy-900);">Quotation Validation:</span>
+        <span style="font-weight: 700; font-size: 12px; color: var(--navy-900);">Quotation Pre-Flight Validation:</span>
       </div>
       <div class="validation-items">
         <div class="check-item">
@@ -687,19 +928,19 @@ function renderWorkspace(container) {
         </div>
         <div class="check-item">
           ${totals.hasUnmatchedItems ? '<span class="check-icon-warning">⚠️</span>' : '<span class="check-icon-ready">✓</span>'}
-          <span>Products Confirmed (${totals.hasUnmatchedItems ? 'Unmatched Items Present' : 'All Confirmed'})</span>
+          <span>Products Confirmed (${totals.hasUnmatchedItems ? 'Unmatched SKUs' : 'All Confirmed'})</span>
         </div>
         <div class="check-item">
           ${totals.hasUnknownCost ? '<span class="check-icon-warning">⚠️</span>' : '<span class="check-icon-ready">✓</span>'}
-          <span>Costs Available (${totals.hasUnknownCost ? 'Cost Missing' : 'Complete'})</span>
+          <span>Costs Available (${totals.hasUnknownCost ? 'Missing Cost' : 'Complete'})</span>
         </div>
         <div class="check-item">
           ${totals.hasPriceBelowCost ? '<span class="check-icon-blocked">✕</span>' : '<span class="check-icon-ready">✓</span>'}
           <span>Price Above Cost</span>
         </div>
         <div class="check-item">
-          <span class="check-icon-ready">✓</span>
-          <span>Lead Time</span>
+          ${lifecycle === 'APPROVED' || lifecycle === 'READY_FOR_ERP' ? '<span class="check-icon-ready">✓</span>' : '<span class="check-icon-warning">⚠️</span>'}
+          <span>Approval Status (${lifecycle})</span>
         </div>
       </div>
     </div>
@@ -709,7 +950,7 @@ function renderWorkspace(container) {
       <div style="display: flex; align-items: center; gap: 12px; font-size: 11.5px; color: var(--slate-500);">
         <span>Auto-save: <strong style="color: var(--success);">Active</strong></span>
         <span>•</span>
-        <span>Status: <strong style="color: var(--navy-900);">Workspace Draft</strong></span>
+        <span>Lifecycle: <strong style="color: var(--navy-900);">${lifecycle}</strong></span>
       </div>
       <div style="display: flex; gap: 10px;">
         <button class="btn btn-secondary" onclick="saveDraft()">Save Draft</button>
@@ -821,29 +1062,40 @@ function renderTableRows() {
   }).join("");
 }
 
-// Calculations Engine with Strict Decimal Precision
-function calculateTotals() {
+// Calculations Engine with Strict Decimal Precision & Centralized Pricing Policy Support
+function calculateTotals(targetQuote) {
+  const quote = targetQuote || currentQuote;
+  const items = (quote && Array.isArray(quote.lineItems)) ? quote.lineItems : [];
+  const headerDiscPct = Math.min(Math.max(Number(quote && quote.headerDiscountPercent) || 0, 0), 100);
+
   let subtotal = 0;
   let totalCost = 0;
   let hasUnknownCost = false;
   let hasPriceBelowCost = false;
   let hasUnmatchedItems = false;
   let totalUnits = 0;
+  let totalDiscountAmount = 0;
 
-  currentQuote.lineItems.forEach(item => {
+  items.forEach(item => {
     const qty = Math.max(1, Math.floor(Number(item.qty) || 1));
     const sellingPrice = Math.max(0, Number(item.sellingPrice) || 0);
-    const lineTotal = Math.round(qty * sellingPrice * 100) / 100;
+    const disc = Math.min(Math.max(Number(item.discountPercent || item.discount) || 0, 0), 100);
     
+    const gross = Math.round(qty * sellingPrice * 100) / 100;
+    const discAmt = Math.round(gross * (disc / 100) * 100) / 100;
+    const lineTotal = Math.round(Math.max(0, gross - discAmt) * 100) / 100;
+
     subtotal += lineTotal;
     totalUnits += qty;
+    totalDiscountAmount += discAmt;
 
     if (item.cost === null || item.cost === undefined || isNaN(item.cost)) {
       hasUnknownCost = true;
     } else {
       const cost = Number(item.cost);
-      totalCost += Math.round(qty * cost * 100) / 100;
-      if (sellingPrice < cost) {
+      const lineCost = Math.round(qty * cost * 100) / 100;
+      totalCost += lineCost;
+      if (sellingPrice < cost || lineTotal < lineCost) {
         hasPriceBelowCost = true;
       }
     }
@@ -853,7 +1105,12 @@ function calculateTotals() {
     }
   });
 
-  subtotal = Math.round(subtotal * 100) / 100;
+  const subtotalBeforeHeaderDiscount = Math.round(subtotal * 100) / 100;
+  const headerDiscountAmount = Math.round(subtotalBeforeHeaderDiscount * (headerDiscPct / 100) * 100) / 100;
+  const netSubtotal = Math.round(Math.max(0, subtotalBeforeHeaderDiscount - headerDiscountAmount) * 100) / 100;
+  totalDiscountAmount = Math.round((totalDiscountAmount + headerDiscountAmount) * 100) / 100;
+
+  subtotal = netSubtotal;
   totalCost = Math.round(totalCost * 100) / 100;
 
   const vat = Math.round(subtotal * 0.05 * 100) / 100;
@@ -861,7 +1118,9 @@ function calculateTotals() {
   const grossProfit = hasUnknownCost ? null : Math.round((subtotal - totalCost) * 100) / 100;
   const grossMargin = (hasUnknownCost || subtotal === 0) ? (hasUnknownCost ? null : 0) : Math.round(((grossProfit / subtotal) * 100) * 10) / 10;
 
-  return {
+  const isMarginBelowThreshold = !hasUnknownCost && grossMargin !== null && grossMargin < 15.0;
+
+  const res = {
     subtotal,
     vat,
     grandTotal,
@@ -871,23 +1130,198 @@ function calculateTotals() {
     hasUnknownCost,
     hasPriceBelowCost,
     hasUnmatchedItems,
-    totalUnits
+    totalUnits,
+    subtotalBeforeHeaderDiscount,
+    headerDiscountPercent: headerDiscPct,
+    headerDiscountAmount,
+    totalDiscountAmount,
+    isMarginBelowThreshold,
+    currency: 'AED',
+    isVatProvisional: true,
+    costValuationBasis: 'WEIGHTED_AVERAGE_COST',
+    isCostBasisProvisional: true
   };
+
+  if (quote) {
+    quote.financials = res;
+    if (workflowLifecycleModule && typeof workflowLifecycleModule.syncQuoteApprovals === "function") {
+      workflowLifecycleModule.syncQuoteApprovals(quote, defaultPricingEngine ? defaultPricingEngine.getPolicy() : {});
+    }
+  }
+
+  return res;
 }
 
+// Update row field with audit trail recording
 function updateRowField(id, field, value) {
   const item = currentQuote.lineItems.find(i => i.id === id);
   if (!item) return;
 
+  const prev = item[field];
+
   if (field === "qty") {
     item.qty = Math.max(1, Math.floor(parseFloat(value) || 1));
+    if (workflowLifecycleModule && prev !== item.qty) {
+      workflowLifecycleModule.recordAuditEvent(currentQuote, {
+        eventType: workflowLifecycleModule.AUDIT_EVENT_TYPES.QUANTITY_CHANGED,
+        actor: workflowLifecycleModule.DEMO_ACTORS.ESTIMATOR,
+        previousValue: prev,
+        newValue: item.qty,
+        reason: `Line ${item.lineNo || id} (${item.erpCode || item.description}) quantity changed`
+      });
+    }
   } else if (field === "sellingPrice") {
     item.sellingPrice = Math.max(0, Math.round((parseFloat(value) || 0) * 100) / 100);
+    if (workflowLifecycleModule && prev !== item.sellingPrice) {
+      workflowLifecycleModule.recordAuditEvent(currentQuote, {
+        eventType: workflowLifecycleModule.AUDIT_EVENT_TYPES.SELLING_PRICE_CHANGED,
+        actor: workflowLifecycleModule.DEMO_ACTORS.ESTIMATOR,
+        previousValue: prev,
+        newValue: item.sellingPrice,
+        reason: `Line ${item.lineNo || id} (${item.erpCode || item.description}) unit selling price changed`
+      });
+    }
+  } else if (field === "discountPercent") {
+    item.discountPercent = Math.min(Math.max(parseFloat(value) || 0, 0), 100);
+    if (workflowLifecycleModule && prev !== item.discountPercent) {
+      workflowLifecycleModule.recordAuditEvent(currentQuote, {
+        eventType: workflowLifecycleModule.AUDIT_EVENT_TYPES.DISCOUNT_CHANGED,
+        actor: workflowLifecycleModule.DEMO_ACTORS.ESTIMATOR,
+        previousValue: `${prev || 0}%`,
+        newValue: `${item.discountPercent}%`,
+        reason: `Line ${item.lineNo || id} (${item.erpCode || item.description}) discount updated`
+      });
+    }
   } else {
     item[field] = value;
   }
 
   renderWorkspace(document.getElementById("mainContent"));
+}
+
+// Update header discount with audit trail
+function updateHeaderDiscount(val) {
+  const prev = currentQuote.headerDiscountPercent || 0;
+  const num = Math.min(Math.max(parseFloat(val) || 0, 0), 100);
+  currentQuote.headerDiscountPercent = num;
+
+  if (workflowLifecycleModule) {
+    workflowLifecycleModule.recordAuditEvent(currentQuote, {
+      eventType: workflowLifecycleModule.AUDIT_EVENT_TYPES.DISCOUNT_CHANGED,
+      actor: workflowLifecycleModule.DEMO_ACTORS.ESTIMATOR,
+      previousValue: `${prev}%`,
+      newValue: `${num}%`,
+      reason: `Overall quote header discount changed from ${prev}% to ${num}%`
+    });
+  }
+
+  saveDraft();
+  renderWorkspace(document.getElementById("mainContent"));
+}
+
+// Lifecycle transition handler through central validator
+function handleLifecycleTransition(targetState) {
+  if (!workflowLifecycleModule) {
+    currentQuote.lifecycleState = targetState;
+    currentQuote.status = targetState;
+    renderWorkspace(document.getElementById("mainContent"));
+    return;
+  }
+
+  const validation = workflowLifecycleModule.validateTransition(currentQuote, targetState, {
+    isMockMode: true,
+    pricingPolicy: defaultPricingEngine ? defaultPricingEngine.getPolicy() : {}
+  });
+
+  if (!validation.allowed) {
+    const errorMsg = validation.errors.join('\n• ');
+    alert(`Transition to ${targetState} Blocked:\n\n• ${errorMsg}`);
+    return;
+  }
+
+  try {
+    workflowLifecycleModule.executeTransition(currentQuote, targetState, {
+      actor: workflowLifecycleModule.DEMO_ACTORS.ESTIMATOR,
+      reason: `Quotation advanced to ${targetState}`
+    });
+    currentQuote.status = targetState;
+    saveDraft();
+    renderWorkspace(document.getElementById("mainContent"));
+    showToast(`Quotation transitioned to ${targetState}`);
+  } catch (err) {
+    alert(`Transition Error: ${err.message}`);
+  }
+}
+
+// Approval decision resolution
+function handleApprovalDecision(approvalId, decision) {
+  if (!workflowLifecycleModule) return;
+  const approver = workflowLifecycleModule.DEMO_ACTORS.COMMERCIAL_MANAGER;
+  let comments = '';
+  if (decision === 'REQUEST_CHANGES') {
+    comments = prompt('Enter change requests or required price adjustments for estimator:', 'Please reduce line discount or increase margin to minimum 15%');
+    if (comments === null) return;
+  } else if (decision === 'REJECT') {
+    comments = prompt('Enter reason for commercial rejection:', 'Pricing does not meet company commercial thresholds');
+    if (comments === null) return;
+  } else {
+    comments = 'Commercial and margin thresholds verified & accepted by Demo Manager.';
+  }
+
+  try {
+    workflowLifecycleModule.applyApprovalDecision(currentQuote, approvalId, decision, approver, comments);
+    
+    if (decision === 'CHANGES_REQUESTED') {
+      currentQuote.lifecycleState = workflowLifecycleModule.LIFECYCLE_STATES.CHANGES_REQUESTED;
+      currentQuote.status = 'Changes Requested';
+    } else if (decision === 'APPROVED') {
+      const allApproved = currentQuote.approvals.every(a => a.decision === 'APPROVED');
+      if (allApproved) {
+        currentQuote.lifecycleState = workflowLifecycleModule.LIFECYCLE_STATES.APPROVED;
+        currentQuote.status = 'Approved';
+      }
+    } else if (decision === 'REJECTED') {
+      currentQuote.lifecycleState = workflowLifecycleModule.LIFECYCLE_STATES.CHANGES_REQUESTED;
+      currentQuote.status = 'Rejected';
+    }
+
+    saveDraft();
+    renderWorkspace(document.getElementById("mainContent"));
+    showToast(`Approval decision recorded: ${decision}`);
+  } catch (err) {
+    alert(`Approval action failed: ${err.message}`);
+  }
+}
+
+// Toggle Audit Trail
+function toggleAuditTrail() {
+  window._mimAuditTrailExpanded = window._mimAuditTrailExpanded === false ? true : false;
+  const el = document.getElementById("auditTimelineContainer");
+  const txt = document.getElementById("auditToggleText");
+  if (el) {
+    el.style.display = window._mimAuditTrailExpanded ? "flex" : "none";
+  }
+  if (txt) {
+    txt.textContent = window._mimAuditTrailExpanded ? "Collapse ▲" : "Expand ▼";
+  }
+}
+
+// Render Audit Trail Entries
+function renderAuditTrailEntries() {
+  const trail = (currentQuote && Array.isArray(currentQuote.auditTrail)) ? currentQuote.auditTrail : [];
+  if (trail.length === 0) {
+    return `<div style="padding: 12px; color: var(--slate-400); font-size: 11px; text-align: center;">No audit events recorded for this draft.</div>`;
+  }
+  return trail.slice().reverse().map(ev => `
+    <div class="audit-entry">
+      <span class="audit-entry-time">${new Date(ev.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+      <span class="audit-entry-tag">${ev.eventType}</span>
+      <div class="audit-entry-body">
+        <div class="audit-entry-actor">${escapeHtml(ev.actor)} <span style="font-weight: 400; color: var(--slate-500);">(${ev.actorRole || 'User'})</span></div>
+        <div class="audit-entry-desc">${escapeHtml(ev.reason || '')} ${ev.previousValue !== null && ev.newValue !== null ? `[${ev.previousValue} ➔ ${ev.newValue}]` : ''}</div>
+      </div>
+    </div>
+  `).join('');
 }
 
 function resolvePriceWarning(id, action) {
@@ -1963,43 +2397,61 @@ function renderPreview(container) {
           <thead>
             <tr>
               <th style="width: 30px;">#</th>
-              <th style="width: 120px;">ERP Code</th>
+              <th style="width: 110px;">ERP Code</th>
               <th>Description & Specification</th>
               <th style="width: 50px; text-align: right;">Qty</th>
-              <th style="width: 50px;">Unit</th>
-              <th style="width: 90px; text-align: right;">Rate (AED)</th>
-              <th style="width: 100px; text-align: right;">Total (AED)</th>
+              <th style="width: 45px;">Unit</th>
+              <th style="width: 85px; text-align: right;">Rate (AED)</th>
+              <th style="width: 60px; text-align: right;">Disc %</th>
+              <th style="width: 95px; text-align: right;">Total (AED)</th>
             </tr>
           </thead>
           <tbody>
-            ${currentQuote.lineItems.map((item, idx) => `
-              <tr>
-                <td>${idx + 1}</td>
-                <td class="font-mono">${item.erpCode || '<span style="color: var(--warning);">[MATCH PENDING]</span>'}</td>
-                <td>
-                  <strong>${escapeHtml(item.description)}</strong>
-                  <div style="font-size: 10.5px; color: var(--slate-600);">${escapeHtml(item.variant)}</div>
-                </td>
-                <td style="text-align: right;">${item.qty}</td>
-                <td>${item.unit}</td>
-                <td style="text-align: right; font-family: var(--font-mono);">${item.sellingPrice.toFixed(2)}</td>
-                <td style="text-align: right; font-family: var(--font-mono); font-weight: 600;">
-                  ${formatMoney(item.qty * item.sellingPrice)}
-                </td>
-              </tr>
-            `).join("")}
+            ${currentQuote.lineItems.map((item, idx) => {
+              const qty = Math.max(1, Math.floor(Number(item.qty) || 1));
+              const sellingPrice = Math.max(0, Number(item.sellingPrice) || 0);
+              const disc = Math.min(Math.max(Number(item.discountPercent || item.discount) || 0, 0), 100);
+              const lineTotal = Math.round(Math.max(0, (qty * sellingPrice) * (1 - disc / 100)) * 100) / 100;
+              return `
+                <tr>
+                  <td>${idx + 1}</td>
+                  <td class="font-mono">${item.erpCode || '<span style="color: var(--warning);">[MATCH PENDING]</span>'}</td>
+                  <td>
+                    <strong>${escapeHtml(item.description)}</strong>
+                    <div style="font-size: 10.5px; color: var(--slate-600);">${escapeHtml(item.variant)}</div>
+                  </td>
+                  <td style="text-align: right;">${qty}</td>
+                  <td>${item.unit}</td>
+                  <td style="text-align: right; font-family: var(--font-mono);">${sellingPrice.toFixed(2)}</td>
+                  <td style="text-align: right; font-family: var(--font-mono);">${disc > 0 ? disc + '%' : '-'}</td>
+                  <td style="text-align: right; font-family: var(--font-mono); font-weight: 600;">
+                    ${formatMoney(lineTotal)}
+                  </td>
+                </tr>
+              `;
+            }).join("")}
           </tbody>
         </table>
 
         <!-- Financial Summary -->
         <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
-          <div style="width: 320px;">
+          <div style="width: 340px;">
             <div class="summary-row">
-              <span class="text-muted">Subtotal (Excl. VAT):</span>
-              <span class="font-mono">AED ${formatMoney(totals.subtotal)}</span>
+              <span class="text-muted">Gross Subtotal (Excl. VAT):</span>
+              <span class="font-mono">AED ${formatMoney(totals.subtotalBeforeHeaderDiscount || totals.subtotal)}</span>
+            </div>
+            ${(totals.totalDiscountAmount > 0) ? `
+              <div class="summary-row">
+                <span class="text-muted">Total Discounts Applied:</span>
+                <span class="font-mono" style="color: var(--danger);">- AED ${formatMoney(totals.totalDiscountAmount)}</span>
+              </div>
+            ` : ''}
+            <div class="summary-row">
+              <span class="text-muted">Net Subtotal:</span>
+              <span class="font-mono" style="font-weight: 600;">AED ${formatMoney(totals.subtotal)}</span>
             </div>
             <div class="summary-row">
-              <span class="text-muted">UAE VAT at 5.0%:</span>
+              <span class="text-muted">UAE VAT at 5.0% (Provisional):</span>
               <span class="font-mono">AED ${formatMoney(totals.vat)}</span>
             </div>
             <div class="summary-row grand-total" style="font-size: 15px; border-top: 2px solid var(--navy-900);">
@@ -2010,7 +2462,7 @@ function renderPreview(container) {
         </div>
 
         <div class="amount-words-box">
-          <strong>Currency:</strong> United Arab Emirates Dirham (AED) • Applicable UAE VAT: 5.0%
+          <strong>Currency:</strong> United Arab Emirates Dirham (AED) • Applicable UAE VAT: 5.0% (Provisional) • Cost Basis: WAC (Provisional)
         </div>
 
         <!-- Commercial Terms -->
@@ -2020,7 +2472,7 @@ function renderPreview(container) {
           <div>• <strong>Delivery Terms:</strong> ${escapeHtml(currentQuote.deliveryNotes)}</div>
           <div>• <strong>Warranty:</strong> ${escapeHtml(currentQuote.customerRemarks)}</div>
           <div style="margin-top: 6px; font-size: 10px; color: var(--slate-500);">
-            1. Prices valid for 30 calendar days. 2. This draft quotation is subject to final ERP booking and stock confirmation. 3. UAE VAT Registration TRN: 100293847500003.
+            1. Prices valid for 30 calendar days. 2. This draft quotation is a preliminary estimate and does NOT constitute an official ERP order confirmation. 3. UAE VAT Registration TRN: 100293847500003 (Provisional).
           </div>
         </div>
 
@@ -2046,7 +2498,9 @@ function renderPreview(container) {
 // --------------------------------------------------------------------------
 function openErpConfirmModal() {
   const totals = calculateTotals();
-  const isBlocked = totals.hasPriceBelowCost || totals.hasUnknownCost || totals.hasUnmatchedItems;
+  const lifecycle = currentQuote.lifecycleState || "DRAFT";
+  const isLifecycleApproved = lifecycle === 'APPROVED' || lifecycle === 'READY_FOR_ERP';
+  const isBlocked = totals.hasPriceBelowCost || totals.hasUnknownCost || totals.hasUnmatchedItems || !isLifecycleApproved;
 
   const overlay = document.createElement("div");
   overlay.className = "modal-overlay";
@@ -2061,16 +2515,21 @@ function openErpConfirmModal() {
 
       <div class="modal-body">
         <div style="background-color: var(--warning-bg); border: 1px solid var(--warning-border); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 12px;">
-          ⚠️ <strong>UI Prototype Demo Mode:</strong> This application assists in quotation assembly and validation.
-          Official ERP quotation records are generated only upon explicit submission to the live Windows ERP service.
+          ⚠️ <strong>UI Prototype Demo Mode (Read-Only Connector):</strong> This application prepares and validates quotations.
+          Official ERP quotation records are strictly generated only by the authoritative live Windows ERP database.
+          <strong>ERP_CONFIRMED is prohibited in mock mode.</strong>
         </div>
 
-        <div style="font-weight: 700; margin-bottom: 10px; font-size: 12.5px;">Pre-Confirmation Verification Checklist:</div>
+        <div style="font-weight: 700; margin-bottom: 10px; font-size: 12.5px;">Pre-Flight Verification Checklist:</div>
 
         <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
           <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" ${isLifecycleApproved ? 'checked' : ''} disabled>
+            <span>Quotation Lifecycle Status: <strong>${lifecycle}</strong> ${isLifecycleApproved ? '(Approved)' : '(Approval Required)'}</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px;">
             <input type="checkbox" checked disabled>
-            <span>Customer route verified: <strong>${currentQuote.customerRoute === 'D' ? 'Debtors Ledger [D]' : 'General Ledger [G]'}</strong></span>
+            <span>Customer routing verified: <strong>${currentQuote.customerRoute === 'D' ? 'Debtors Ledger [D]' : 'General Ledger [G]'}</strong></span>
           </label>
           <label style="display: flex; align-items: center; gap: 8px;">
             <input type="checkbox" ${totals.hasUnmatchedItems ? '' : 'checked'} disabled>
@@ -2078,22 +2537,19 @@ function openErpConfirmModal() {
           </label>
           <label style="display: flex; align-items: center; gap: 8px;">
             <input type="checkbox" ${totals.hasUnknownCost ? '' : 'checked'} disabled>
-            <span>Cost basis available and recorded in catalog</span>
+            <span>Cost basis available and recorded in catalog (WAC Provisional)</span>
           </label>
           <label style="display: flex; align-items: center; gap: 8px;">
             <input type="checkbox" ${totals.hasPriceBelowCost ? '' : 'checked'} disabled>
             <span>No line item priced below recorded cost</span>
           </label>
-          <label style="display: flex; align-items: center; gap: 8px;">
-            <input type="checkbox" checked disabled>
-            <span>Commercial lead time reviewed (${escapeHtml(currentQuote.leadTime)})</span>
-          </label>
         </div>
 
         ${isBlocked ? `
           <div style="margin-top: 14px; padding: 10px 14px; background-color: var(--danger-bg); border: 1px solid var(--danger-border); border-radius: var(--radius-sm); font-size: 11.5px; color: var(--danger);">
-            ✕ <strong>Action Blocked:</strong> Cannot proceed to ERP confirmation due to the following issues:
+            ✕ <strong>Action Blocked:</strong> Cannot proceed to ERP preparation due to the following issues:
             <ul style="margin: 6px 0 0 16px;">
+              ${!isLifecycleApproved ? `<li>Quotation must be in 'APPROVED' or 'READY_FOR_ERP' state (Current: '${lifecycle}').</li>` : ''}
               ${totals.hasPriceBelowCost ? '<li>One or more items are priced below cost.</li>' : ''}
               ${totals.hasUnknownCost ? '<li>One or more items have unknown cost.</li>' : ''}
               ${totals.hasUnmatchedItems ? '<li>One or more items are awaiting ERP catalog matching.</li>' : ''}
@@ -2101,7 +2557,7 @@ function openErpConfirmModal() {
           </div>
         ` : `
           <div style="margin-top: 14px; padding: 10px 14px; background-color: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius-sm); font-size: 11.5px; color: var(--success);">
-            ✓ All checks passed! Ready for live ERP connector handshake.
+            ✓ All pre-flight checks passed! Ready for ERP staging payload generation.
           </div>
         `}
       </div>
@@ -2109,7 +2565,7 @@ function openErpConfirmModal() {
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeErpModal()">Return to Workspace</button>
         <button class="btn btn-primary" ${isBlocked ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''} onclick="${isBlocked ? '' : 'simulateErpHandshake()'}">
-          Simulate ERP Confirmation Handshake
+          Attempt ERP Confirmation Handshake (Mock)
         </button>
       </div>
     </div>
@@ -2120,10 +2576,22 @@ function openErpConfirmModal() {
 
 function simulateErpHandshake() {
   closeErpModal();
-  showToast("Transmitting quotation payload to MIM ERP Connector (Simulation)...");
-  setTimeout(() => {
-    alert("Simulated Pre-Flight Validation Complete!\n\nIn Phase 2, this payload connects to the Windows ERP desktop connector service.\n\nNotice: This is a UI prototype. No ERP records have been committed or official quotation numbers generated.");
-  }, 500);
+  if (workflowLifecycleModule) {
+    try {
+      // Intentionally attempt transition through central validator to prove strict security boundary
+      workflowLifecycleModule.executeTransition(currentQuote, 'ERP_CONFIRMED', { isMockMode: true });
+    } catch (err) {
+      alert(`ERP Confirmation Guard (Security Boundary Enforced):\n\n${err.message}\n\nNotice: This connector is operating in MOCK_DEMO_DATA mode. Live ERP write operations and official ERP quotation numbers are strictly prohibited until Phase 5 live connector certification.\n\nThe quotation has been safely advanced to 'READY_FOR_ERP' for future staging.`);
+      
+      if (currentQuote.lifecycleState === 'APPROVED') {
+        currentQuote.lifecycleState = 'READY_FOR_ERP';
+        currentQuote.status = 'Ready for ERP';
+        saveDraft();
+        renderWorkspace(document.getElementById("mainContent"));
+      }
+      return;
+    }
+  }
 }
 
 function closeErpModal() {

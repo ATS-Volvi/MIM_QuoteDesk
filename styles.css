@@ -1370,3 +1370,280 @@ body {
   line-height: 1.45;
 }
 
+/* ==========================================================================
+   Phase 4: Business Rules, Lifecycle & Approval Framework Styles
+   ========================================================================== */
+
+/* Lifecycle Status Badges */
+.badge-in-review {
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  border: 1px solid #d8b4fe;
+}
+
+.badge-changes-requested {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+
+.badge-approved {
+  background-color: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.badge-ready-for-erp {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.badge-provisional {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  font-size: 10px;
+  padding: 1px 5px;
+  font-weight: 500;
+  border-radius: var(--radius-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Lifecycle Stepper / State Header Banner */
+.lifecycle-stepper-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-subtle);
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.lifecycle-steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lifecycle-step-node {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--slate-400);
+}
+
+.lifecycle-step-node.active {
+  color: var(--navy-900);
+}
+
+.lifecycle-step-node.completed {
+  color: var(--success);
+}
+
+.lifecycle-step-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  background-color: var(--slate-100);
+  border: 1px solid var(--slate-300);
+  color: var(--slate-500);
+}
+
+.lifecycle-step-node.active .lifecycle-step-dot {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+.lifecycle-step-node.completed .lifecycle-step-dot {
+  background-color: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success);
+}
+
+.lifecycle-step-arrow {
+  color: var(--slate-300);
+  font-size: 12px;
+}
+
+/* Commercial Approvals Panel */
+.approval-panel {
+  background-color: #faf5ff;
+  border: 1px solid #e9d5ff;
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-subtle);
+}
+
+.approval-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.approval-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b21a8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.approval-item-card {
+  background-color: var(--white);
+  border: 1px solid #e9d5ff;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.approval-item-reason {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy-900);
+  margin-bottom: 3px;
+}
+
+.approval-item-meta {
+  font-size: 11px;
+  color: var(--slate-500);
+}
+
+.approval-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Audit Trail Component */
+.audit-trail-card {
+  margin-top: 18px;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  background-color: var(--white);
+  overflow: hidden;
+}
+
+.audit-trail-header {
+  padding: 12px 16px;
+  background-color: var(--slate-50);
+  border-bottom: 1px solid var(--slate-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.audit-timeline-list {
+  padding: 12px 16px;
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.audit-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--slate-100);
+  font-size: 11.5px;
+}
+
+.audit-entry:last-child {
+  border-bottom: none;
+}
+
+.audit-entry-time {
+  font-family: var(--font-mono);
+  color: var(--slate-400);
+  font-size: 10.5px;
+  min-width: 70px;
+}
+
+.audit-entry-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  background-color: var(--slate-100);
+  color: var(--slate-700);
+  white-space: nowrap;
+}
+
+.audit-entry-body {
+  flex: 1;
+}
+
+.audit-entry-actor {
+  font-weight: 600;
+  color: var(--navy-900);
+}
+
+.audit-entry-desc {
+  color: var(--slate-600);
+  margin-top: 2px;
+}
+
+/* Print Layout Enhancements */
+@media print {
+  body {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+  .sidebar,
+  .top-header,
+  .workspace-top-bar,
+  .bottom-action-bar,
+  .watermark-banner button,
+  .toast-container {
+    display: none !important;
+  }
+  .main-wrapper {
+    margin-left: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  .preview-container {
+    padding: 0 !important;
+    background: none !important;
+  }
+  .a4-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 10mm 12mm !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .draft-watermark {
+    opacity: 0.08 !important;
+  }
+}
+
+
